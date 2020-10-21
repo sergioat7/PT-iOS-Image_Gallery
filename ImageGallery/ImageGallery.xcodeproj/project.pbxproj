@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		FBB2B1C52540C22700999894 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1C42540C22700999894 /* AppDelegate.swift */; };
 		FBB2B1C72540C22700999894 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1C62540C22700999894 /* SceneDelegate.swift */; };
-		FBB2B1C92540C22700999894 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1C82540C22700999894 /* ViewController.swift */; };
-		FBB2B1CC2540C22700999894 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBB2B1CA2540C22700999894 /* Main.storyboard */; };
 		FBB2B1CE2540C22900999894 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBB2B1CD2540C22900999894 /* Assets.xcassets */; };
 		FBB2B1D12540C22900999894 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBB2B1CF2540C22900999894 /* LaunchScreen.storyboard */; };
 		FBB2B1DC2540C22900999894 /* ImageGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1DB2540C22900999894 /* ImageGalleryTests.swift */; };
@@ -19,6 +17,7 @@
 		FBB2B1FF2540C5C200999894 /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1FE2540C5C200999894 /* BaseRouter.swift */; };
 		FBB2B2012540C5CC00999894 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B2002540C5CC00999894 /* BaseViewController.swift */; };
 		FBB2B2032540C5D700999894 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B2022540C5D700999894 /* BaseViewModel.swift */; };
+		FBB2B2072540E49900999894 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B2062540E49900999894 /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +41,6 @@
 		FBB2B1C12540C22700999894 /* ImageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBB2B1C42540C22700999894 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBB2B1C62540C22700999894 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FBB2B1C82540C22700999894 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		FBB2B1CB2540C22700999894 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FBB2B1CD2540C22900999894 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBB2B1D02540C22900999894 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FBB2B1D22540C22900999894 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,6 +54,7 @@
 		FBB2B1FE2540C5C200999894 /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
 		FBB2B2002540C5CC00999894 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		FBB2B2022540C5D700999894 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		FBB2B2062540E49900999894 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +139,6 @@
 				FBB2B1F62540C3B000999894 /* Common */,
 				FBB2B1F72540C3B800999894 /* Controllers */,
 				FBB2B1CF2540C22900999894 /* LaunchScreen.storyboard */,
-				FBB2B1CA2540C22700999894 /* Main.storyboard */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -157,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				FBB2B1F92540C48100999894 /* Base */,
+				FBB2B2042540E46800999894 /* Extensions */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -164,7 +162,6 @@
 		FBB2B1F72540C3B800999894 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FBB2B1C82540C22700999894 /* ViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -186,6 +183,22 @@
 				FBB2B2022540C5D700999894 /* BaseViewModel.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		FBB2B2042540E46800999894 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FBB2B2052540E48F00999894 /* UIViewController */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FBB2B2052540E48F00999894 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FBB2B2062540E49900999894 /* UIViewController+Extension.swift */,
+			);
+			path = UIViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,7 +307,6 @@
 			files = (
 				FBB2B1D12540C22900999894 /* LaunchScreen.storyboard in Resources */,
 				FBB2B1CE2540C22900999894 /* Assets.xcassets in Resources */,
-				FBB2B1CC2540C22700999894 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,10 +332,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBB2B1FB2540C49A00999894 /* BaseDataManager.swift in Sources */,
-				FBB2B1C92540C22700999894 /* ViewController.swift in Sources */,
 				FBB2B1FF2540C5C200999894 /* BaseRouter.swift in Sources */,
 				FBB2B2032540C5D700999894 /* BaseViewModel.swift in Sources */,
 				FBB2B1C52540C22700999894 /* AppDelegate.swift in Sources */,
+				FBB2B2072540E49900999894 /* UIViewController+Extension.swift in Sources */,
 				FBB2B1C72540C22700999894 /* SceneDelegate.swift in Sources */,
 				FBB2B2012540C5CC00999894 /* BaseViewController.swift in Sources */,
 			);
@@ -361,14 +373,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		FBB2B1CA2540C22700999894 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FBB2B1CB2540C22700999894 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		FBB2B1CF2540C22900999894 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -499,11 +503,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = ImageGallery/Info.plist;
+				INFOPLIST_FILE = ImageGallery/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = aragones.sergio.ImageGallery;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -516,11 +522,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = ImageGallery/Info.plist;
+				INFOPLIST_FILE = ImageGallery/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = aragones.sergio.ImageGallery;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
