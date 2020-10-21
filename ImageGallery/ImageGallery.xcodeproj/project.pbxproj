@@ -15,6 +15,10 @@
 		FBB2B1D12540C22900999894 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBB2B1CF2540C22900999894 /* LaunchScreen.storyboard */; };
 		FBB2B1DC2540C22900999894 /* ImageGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1DB2540C22900999894 /* ImageGalleryTests.swift */; };
 		FBB2B1E72540C22900999894 /* ImageGalleryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1E62540C22900999894 /* ImageGalleryUITests.swift */; };
+		FBB2B1FB2540C49A00999894 /* BaseDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1FA2540C49A00999894 /* BaseDataManager.swift */; };
+		FBB2B1FF2540C5C200999894 /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1FE2540C5C200999894 /* BaseRouter.swift */; };
+		FBB2B2012540C5CC00999894 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B2002540C5CC00999894 /* BaseViewController.swift */; };
+		FBB2B2032540C5D700999894 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B2022540C5D700999894 /* BaseViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		FBB2B1E22540C22900999894 /* ImageGalleryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageGalleryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBB2B1E62540C22900999894 /* ImageGalleryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryUITests.swift; sourceTree = "<group>"; };
 		FBB2B1E82540C22900999894 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FBB2B1FA2540C49A00999894 /* BaseDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDataManager.swift; sourceTree = "<group>"; };
+		FBB2B1FE2540C5C200999894 /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
+		FBB2B2002540C5CC00999894 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		FBB2B2022540C5D700999894 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +156,7 @@
 		FBB2B1F62540C3B000999894 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FBB2B1F92540C48100999894 /* Base */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -166,6 +175,17 @@
 				FBB2B1D22540C22900999894 /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		FBB2B1F92540C48100999894 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				FBB2B1FA2540C49A00999894 /* BaseDataManager.swift */,
+				FBB2B1FE2540C5C200999894 /* BaseRouter.swift */,
+				FBB2B2002540C5CC00999894 /* BaseViewController.swift */,
+				FBB2B2022540C5D700999894 /* BaseViewModel.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,9 +319,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBB2B1FB2540C49A00999894 /* BaseDataManager.swift in Sources */,
 				FBB2B1C92540C22700999894 /* ViewController.swift in Sources */,
+				FBB2B1FF2540C5C200999894 /* BaseRouter.swift in Sources */,
+				FBB2B2032540C5D700999894 /* BaseViewModel.swift in Sources */,
 				FBB2B1C52540C22700999894 /* AppDelegate.swift in Sources */,
 				FBB2B1C72540C22700999894 /* SceneDelegate.swift in Sources */,
+				FBB2B2012540C5CC00999894 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
