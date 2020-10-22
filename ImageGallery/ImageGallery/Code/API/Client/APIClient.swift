@@ -23,23 +23,18 @@ public class APIClient {
                                    success: @escaping (T.Response) -> Void,
                                    failure: @escaping (ErrorResponse) -> Void) {
         
-        var endpoint = self.endpoint(for: request)
+        let endpoint = URL(string: baseEndpoint)!
         let method = request.method
         
-        endpoint.appendQueryParameters(request.queryParams)
-        endpoint.appendQueryParameters(["format" : "json"])
-        endpoint.appendQueryParameters(["nojsoncallback" : "1"])
-        endpoint.appendQueryParameters(["api_key" : "f9cc014fa76b098f9e82f1c288379ea1"])
-//        var parameters: Parameters = request.queryParams
-//        parameters["format"] = "json"
-//        parameters["nojsoncallback"] = "1"
-//        parameters["api_key"] = "f9cc014fa76b098f9e82f1c288379ea1"
+        var parameters: Parameters = request.queryParams
+        parameters["format"] = "json"
+        parameters["nojsoncallback"] = "1"
+        parameters["api_key"] = "f9cc014fa76b098f9e82f1c288379ea1"
         
         let request = session.request(endpoint,
                                       method: method,
-//                                      parameters: parameters,
-//                                      encoding: URLEncoding(destination: .queryString),
-                                      encoding: JSONEncoding.default).validate()
+                                      parameters: parameters,
+                                      encoding: URLEncoding(destination: .queryString)).validate()
         request.responseJSON { response in
             
             let statusCode = response.response?.statusCode ?? -1
@@ -63,12 +58,6 @@ public class APIClient {
     }
     
     // MARK: - Private functions
-    
-    private func endpoint<T: APIRequest>(for request: T) -> URL {
-        
-        let urlString = "\(baseEndpoint)\(request.resourceName)\(request.resourcePath)"
-        return URL(string: urlString)!
-    }
     
     private func mapErrorData(data: Data, failure: @escaping (ErrorResponse) -> Void) {
         
