@@ -20,6 +20,7 @@
 		FB4692FB2541AA0C00B9A38D /* SizesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4692FA2541AA0C00B9A38D /* SizesResponse.swift */; };
 		FB4692FD2541AB5600B9A38D /* PhotoSizeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4692FC2541AB5600B9A38D /* PhotoSizeResponse.swift */; };
 		FB4692FF2541AC2B00B9A38D /* SizePhotoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4692FE2541AC2B00B9A38D /* SizePhotoResponse.swift */; };
+		FB4693022541AE5100B9A38D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4693012541AE5100B9A38D /* Constants.swift */; };
 		FBB2B1C52540C22700999894 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB2B1C42540C22700999894 /* AppDelegate.swift */; };
 		FBB2B1CE2540C22900999894 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBB2B1CD2540C22900999894 /* Assets.xcassets */; };
 		FBB2B1D12540C22900999894 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBB2B1CF2540C22900999894 /* LaunchScreen.storyboard */; };
@@ -61,6 +62,7 @@
 		FB4692FA2541AA0C00B9A38D /* SizesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizesResponse.swift; sourceTree = "<group>"; };
 		FB4692FC2541AB5600B9A38D /* PhotoSizeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSizeResponse.swift; sourceTree = "<group>"; };
 		FB4692FE2541AC2B00B9A38D /* SizePhotoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePhotoResponse.swift; sourceTree = "<group>"; };
+		FB4693012541AE5100B9A38D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FBB2B1C12540C22700999894 /* ImageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBB2B1C42540C22700999894 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBB2B1CD2540C22900999894 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -155,6 +157,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		FB4693002541AE4500B9A38D /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				FB4693012541AE5100B9A38D /* Constants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		FBB2B1B82540C22700999894 = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +237,7 @@
 		FBB2B1F62540C3B000999894 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FB4693002541AE4500B9A38D /* Constants */,
 				FBB2B1F92540C48100999894 /* Base */,
 				FBB2B2042540E46800999894 /* Extensions */,
 			);
@@ -414,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB4692E12541A0FB00B9A38D /* SearchPhotosResponse.swift in Sources */,
+				FB4693022541AE5100B9A38D /* Constants.swift in Sources */,
 				FBB2B1FB2540C49A00999894 /* BaseDataManager.swift in Sources */,
 				FB4692CC2541891200B9A38D /* APIClient.swift in Sources */,
 				FBB2B1FF2540C5C200999894 /* BaseRouter.swift in Sources */,

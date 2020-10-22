@@ -23,7 +23,7 @@ class GetSizesRequest: APIRequest {
     
     public init(photoId: String) {
         
-        queryParams = ["method" : "flickr.photos.getSizes"]
-        self.queryParams["photo_id"] = photoId
+        queryParams = [Constants.methodQueryParam : Constants.getSizesMethod]
+        self.queryParams[Constants.photoIdQueryParam] = photoId
     }
 }

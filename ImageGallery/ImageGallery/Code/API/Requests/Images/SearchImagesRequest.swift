@@ -23,8 +23,8 @@ class SearchImagesRequest: APIRequest {
     
     public init(tags: String, page: Int) {
         
-        queryParams = ["method" : "flickr.photos.search"]
-        self.queryParams["tags"] = tags
-        self.queryParams["page"] = String(format: "/%ld", page)
+        queryParams = [Constants.methodQueryParam : Constants.searchPhotosMethod]
+        self.queryParams[Constants.tagsQueryParam] = tags
+        self.queryParams[Constants.pageQueryParam] = String(format: "/%ld", page)
     }
 }
