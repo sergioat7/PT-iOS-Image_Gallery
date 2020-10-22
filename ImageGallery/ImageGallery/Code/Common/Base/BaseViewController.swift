@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol BaseViewProtocol: class {
+    
+}
+
 class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
