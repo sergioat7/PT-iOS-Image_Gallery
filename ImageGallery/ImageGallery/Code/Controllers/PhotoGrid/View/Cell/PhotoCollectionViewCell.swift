@@ -20,7 +20,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     }
     
     func configure() {
-        
         lbTitle.text = photoCellViewModel?.title
     }
 }

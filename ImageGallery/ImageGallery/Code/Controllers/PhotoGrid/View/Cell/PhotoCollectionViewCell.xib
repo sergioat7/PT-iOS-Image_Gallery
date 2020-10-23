@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lFV-X1-Khx">
-                        <rect key="frame" x="0.0" y="0.0" width="273" height="223.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="273" height="244"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ews-40-iT2">
                         <rect key="frame" x="10" y="223.5" width="253" height="20.5"/>
@@ -31,11 +31,11 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="lFV-X1-Khx" secondAttribute="bottom" id="9Vf-mt-hFB"/>
                 <constraint firstAttribute="trailing" secondItem="ews-40-iT2" secondAttribute="trailing" constant="10" id="GCd-Xj-qO4"/>
                 <constraint firstAttribute="trailing" secondItem="lFV-X1-Khx" secondAttribute="trailing" id="Ha9-pX-zDl"/>
                 <constraint firstItem="lFV-X1-Khx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Zks-r2-D9e"/>
                 <constraint firstItem="ews-40-iT2" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="h82-cm-zPo"/>
-                <constraint firstItem="ews-40-iT2" firstAttribute="top" secondItem="lFV-X1-Khx" secondAttribute="bottom" id="i4e-GK-NIS"/>
                 <constraint firstItem="lFV-X1-Khx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ne7-2R-Pwd"/>
                 <constraint firstAttribute="bottom" secondItem="ews-40-iT2" secondAttribute="bottom" id="oEE-cp-V2g"/>
             </constraints>

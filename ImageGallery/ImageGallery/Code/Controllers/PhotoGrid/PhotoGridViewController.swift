@@ -65,7 +65,10 @@ class PhotoGridViewController: BaseViewController {
     }
     
     private func registerNib() {
-        cvPhotos.register(UINib(nibName: "PhotoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
+        
+        cvPhotos.register(UINib(nibName: "PhotoCollectionViewCell",
+                                bundle: nil),
+                          forCellWithReuseIdentifier: "PhotoCell")
     }
 }
 
