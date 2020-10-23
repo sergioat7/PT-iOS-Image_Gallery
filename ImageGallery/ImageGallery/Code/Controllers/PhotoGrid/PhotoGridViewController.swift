@@ -75,6 +75,10 @@ class PhotoGridViewController: BaseViewController {
                           forCellWithReuseIdentifier: Constants.cellName)
     }
     
+    private func loadMore() {
+        viewModel?.searchPhotos()
+    }
+    
     @objc private func reloadData() {
         
         viewModel?.reloadData()
@@ -178,6 +182,12 @@ extension PhotoGridViewController: UICollectionViewDataSource {
 
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let photoCellViewModelsCount = viewModel?.getPhotoCellViewModels().count ?? 0
+        if indexPath.item == (photoCellViewModelsCount - 1) {
+            loadMore()
         }
     }
 }
