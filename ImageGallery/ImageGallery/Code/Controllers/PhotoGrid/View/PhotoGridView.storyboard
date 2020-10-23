@@ -16,20 +16,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PhotoGridView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="84T-Ty-AUY">
-                                <rect key="frame" x="130.5" y="323" width="114" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="V9r-TK-Esi">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.2196078431372549" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hMa-ia-Hbw">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="84T-Ty-AUY" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kvP-HE-Ti1"/>
-                            <constraint firstItem="84T-Ty-AUY" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="uZZ-1C-OTa"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="V9r-TK-Esi" secondAttribute="trailing" id="HP2-rb-v9n"/>
+                            <constraint firstItem="V9r-TK-Esi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="WsQ-dS-EXP"/>
+                            <constraint firstItem="V9r-TK-Esi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="XNi-jI-Esh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="V9r-TK-Esi" secondAttribute="bottom" id="jdZ-57-Kmz"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cvPhotos" destination="V9r-TK-Esi" id="1QK-5i-VEk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

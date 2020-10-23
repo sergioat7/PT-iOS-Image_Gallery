@@ -9,18 +9,18 @@
 import UIKit
 
 protocol PhotoGridDataManagerProtocol: class {
-    /**
-     * Add here your methods for communication VIEW_MODEL -> DATA_MANAGER
-     */
+    
+    func searchPhotos(tags: String, success: @escaping (PhotosResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
 }
 
 class PhotoGridDataManager: BaseDataManager {
     
     // MARK: - Public variables
     
-    private let apiClient: PhotoGridApiClientProtocol
-    
     // MARK: - Private variables
+    
+    private let apiClient: PhotoGridApiClientProtocol
+    private var page: Int = 1
     
     // MARK: - Initialization
     
@@ -31,5 +31,14 @@ class PhotoGridDataManager: BaseDataManager {
 
 extension PhotoGridDataManager: PhotoGridDataManagerProtocol {
     
+    func searchPhotos(tags: String, success: @escaping (PhotosResponse) -> Void, failure: @escaping (ErrorResponse) -> Void) {
+        apiClient.searchPhotos(tags: tags, page: page, success: { searchResponse in
+            
+            self.page += 1
+            if self.page > searchResponse.photos.pages {
+                self.page = 1
+            }
+            success(searchResponse.photos.photo)
+        }, failure: failure)
+    }
 }
-
