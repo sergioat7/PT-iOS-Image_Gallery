@@ -32,6 +32,7 @@ class PhotoGridViewController: BaseViewController {
     
     private var viewModel:PhotoGridViewModelProtocol?
     private let itemsPerRow: CGFloat = 2
+    private let refreshControl = UIRefreshControl.init(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
     
     // MARK: - View lifecycle
     
@@ -40,7 +41,7 @@ class PhotoGridViewController: BaseViewController {
         
         title = "PHOTOS".localized()
         configViews()
-        setupTableView()
+        setupCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,18 +58,27 @@ class PhotoGridViewController: BaseViewController {
         etSearch.delegate = self
     }
     
-    private func setupTableView() {
+    private func setupCollectionView() {
         
         cvPhotos.delegate = self
         cvPhotos.dataSource = self
         registerNib()
+        
+        refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
+        cvPhotos.refreshControl = refreshControl
     }
     
     private func registerNib() {
         
         cvPhotos.register(UINib(nibName: "PhotoCollectionViewCell",
                                 bundle: nil),
-                          forCellWithReuseIdentifier: "PhotoCell")
+                          forCellWithReuseIdentifier: Constants.cellName)
+    }
+    
+    @objc private func reloadData() {
+        
+        viewModel?.reloadData()
+        viewModel?.searchPhotos()
     }
 }
 
@@ -77,7 +87,9 @@ class PhotoGridViewController: BaseViewController {
 extension PhotoGridViewController: PhotoGridViewProtocol {
     
     func showPhotos() {
+        
         cvPhotos.reloadData()
+        refreshControl.endRefreshing()
     }
     
     func showLoading() {
@@ -105,9 +117,9 @@ extension PhotoGridViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if let text = textField.text {
-            viewModel?.searchPhotos(tags: text)
+            
+            viewModel?.setTags(tags: text)
         }
-        textField.text = nil
         textField.resignFirstResponder()
         return true
       }
@@ -154,14 +166,18 @@ extension PhotoGridViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellName, for: indexPath)
+        let photosCellViewModel = viewModel?.getPhotoCellViewModels() ?? []
+        
+        if let photoCell = cell as? PhotoCollectionViewCell,
+              photosCellViewModel.count > 0 {
             
-            let photosCellViewModel = viewModel?.getPhotoCellViewModels()
-            let photoCellViewModel = photosCellViewModel?[indexPath.row]
-            cell.photoCellViewModel = photoCellViewModel
-            return cell
-        } else {
-            return UICollectionViewCell()
+            let photoCellViewModel = photosCellViewModel[indexPath.row]
+            photoCell.photoCellViewModel = photoCellViewModel
+        }
+
+        return cell
+    }
         }
     }
 }

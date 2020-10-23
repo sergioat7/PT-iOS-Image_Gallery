@@ -10,8 +10,10 @@ import UIKit
 
 protocol PhotoGridViewModelProtocol: class {
     
-    func searchPhotos(tags: String)
+    func setTags(tags: String)
+    func searchPhotos()
     func getPhotoCellViewModels() -> [PhotoCellViewModel]
+    func reloadData()
 }
 
 class PhotoGridViewModel: BaseViewModel {
@@ -23,6 +25,7 @@ class PhotoGridViewModel: BaseViewModel {
     // MARK: - Private variables
     
     private var dataManager: PhotoGridDataManagerProtocol
+    private var tags = ""
     private var photoCellViewModels: [PhotoCellViewModel] = []
     
     // MARK: - Initialization
@@ -45,11 +48,10 @@ class PhotoGridViewModel: BaseViewModel {
     
     private func getContent(tags: String) {
         
-        view?.showLoading()
         dataManager.searchPhotos(tags: tags, success: { photosResponse in
             self.getSizeContent(photosResponse: photosResponse, success: { photoCellViewModels in
                 
-                self.photoCellViewModels = photoCellViewModels
+                self.photoCellViewModels.append(contentsOf: photoCellViewModels)
                 self.view?.showPhotos()
                 self.view?.hideLoading()
             })
@@ -61,7 +63,7 @@ class PhotoGridViewModel: BaseViewModel {
     private func getSizeContent(photosResponse: PhotosResponse, success: @escaping ([PhotoCellViewModel]) -> Void) {
         
         var photoCellViewModels: [PhotoCellViewModel] = []
-        for (index, photoResponse) in photosResponse.enumerated() {
+        for photoResponse in photosResponse {
             
             dataManager.getPhotoSizes(photoId: photoResponse.id,
                                       success: { photoSizesResponse in
@@ -88,12 +90,25 @@ class PhotoGridViewModel: BaseViewModel {
 
 extension PhotoGridViewModel: PhotoGridViewModelProtocol {
     
-    func searchPhotos(tags: String) {
+    func setTags(tags: String) {
+        
+        view?.showLoading()
+        self.tags = tags
+        searchPhotos()
+    }
+    
+    func searchPhotos() {
         getContent(tags: tags)
     }
     
     func getPhotoCellViewModels() -> [PhotoCellViewModel] {
         return photoCellViewModels
+    }
+    
+    func reloadData() {
+        
+        dataManager.resetPage()
+        photoCellViewModels = []
     }
 }
 

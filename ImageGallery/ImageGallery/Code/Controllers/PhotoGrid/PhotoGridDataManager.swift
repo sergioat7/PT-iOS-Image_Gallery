@@ -12,6 +12,7 @@ protocol PhotoGridDataManagerProtocol: class {
     
     func searchPhotos(tags: String, success: @escaping (PhotosResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
     func getPhotoSizes(photoId: String, success: @escaping (PhotoSizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
+    func resetPage()
 }
 
 class PhotoGridDataManager: BaseDataManager {
@@ -52,5 +53,9 @@ extension PhotoGridDataManager: PhotoGridDataManagerProtocol {
                                 success: { sizesResponse in
                                     success(sizesResponse.sizes.size)
                                 }, failure: failure)
+    }
+    
+    func resetPage() {
+        page = 1
     }
 }

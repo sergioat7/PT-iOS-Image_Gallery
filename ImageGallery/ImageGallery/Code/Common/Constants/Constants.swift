@@ -18,5 +18,9 @@ struct Constants {
     static let photoIdQueryParam = "photo_id"
     static let searchPhotosMethod = "flickr.photos.search"
     static let getSizesMethod = "flickr.photos.getSizes"
+    
+    // MARK: - Collection view constants
+    
+    static let cellName = "PhotoCell"
 
 }
