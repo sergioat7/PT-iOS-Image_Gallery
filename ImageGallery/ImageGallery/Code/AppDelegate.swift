@@ -17,11 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         let navigationController = UINavigationController()
-        //TODO load root view controller
         window?.rootViewController = navigationController
+        PhotoGridRouter().push()
         window?.makeKeyAndVisible()
         return true
     }
-
 }
 
