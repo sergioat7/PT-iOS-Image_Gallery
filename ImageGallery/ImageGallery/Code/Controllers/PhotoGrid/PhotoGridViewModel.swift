@@ -94,6 +94,7 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
         
         view?.showLoading()
         self.tags = tags
+        reloadData()
         searchPhotos()
     }
     
