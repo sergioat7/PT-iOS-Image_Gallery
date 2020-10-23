@@ -11,6 +11,7 @@ import UIKit
 protocol PhotoGridDataManagerProtocol: class {
     
     func searchPhotos(tags: String, success: @escaping (PhotosResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
+    func getPhotoSizes(photoId: String, success: @escaping (PhotoSizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
 }
 
 class PhotoGridDataManager: BaseDataManager {
@@ -43,5 +44,13 @@ extension PhotoGridDataManager: PhotoGridDataManagerProtocol {
                                 }
                                 success(searchResponse.photos.photo)
                                }, failure: failure)
+    }
+    
+    func getPhotoSizes(photoId: String, success: @escaping (PhotoSizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void) {
+        
+        apiClient.getPhotoSizes(photoId: photoId,
+                                success: { sizesResponse in
+                                    success(sizesResponse.sizes.size)
+                                }, failure: failure)
     }
 }

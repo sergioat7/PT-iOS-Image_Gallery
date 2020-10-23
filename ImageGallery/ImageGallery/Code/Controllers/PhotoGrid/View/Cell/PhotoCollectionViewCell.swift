@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class PhotoCollectionViewCell: UICollectionViewCell {
 
@@ -20,6 +21,15 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     }
     
     func configure() {
+        
         lbTitle.text = photoCellViewModel?.title
+        
+        if let image = photoCellViewModel?.imageUrl, let imageUrl = URL(string: image) {
+            
+            ivPhoto.kf.indicatorType = .activity
+            ivPhoto.kf.setImage(with: imageUrl)
+        } else {
+            ivPhoto.image = UIImage(named: "noimage")
+        }
     }
 }

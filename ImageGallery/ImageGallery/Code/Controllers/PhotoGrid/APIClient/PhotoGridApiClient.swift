@@ -11,6 +11,7 @@ import UIKit
 protocol PhotoGridApiClientProtocol {
     
     func searchPhotos(tags: String, page: Int, success: @escaping (SearchResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
+    func getPhotoSizes(photoId: String, success: @escaping (SizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
 }
 
 class PhotoGridApiClient: PhotoGridApiClientProtocol {
@@ -19,6 +20,16 @@ class PhotoGridApiClient: PhotoGridApiClientProtocol {
         
         let request = SearchImagesRequest(tags: tags,
                                           page: page)
-        APIClient.shared.sendServer(request, success: success, failure: failure)
+        APIClient.shared.sendServer(request,
+                                    success: success,
+                                    failure: failure)
+    }
+    
+    func getPhotoSizes(photoId: String, success: @escaping (SizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void) {
+        
+        let request = GetSizesRequest(photoId: photoId)
+        APIClient.shared.sendServer(request,
+                                    success: success,
+                                    failure: failure)
     }
 }

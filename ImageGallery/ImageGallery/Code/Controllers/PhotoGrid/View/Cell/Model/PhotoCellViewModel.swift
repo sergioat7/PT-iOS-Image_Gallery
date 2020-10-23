@@ -9,14 +9,24 @@
 class PhotoCellViewModel {
 
     private let photo: PhotoResponse
+    private let image: String?
     
-    init(photo: PhotoResponse) {
+    init(photo: PhotoResponse,
+         image: String?) {
+        
         self.photo = photo
+        self.image = image
     }
     
     var id: String {
         get {
             return photo.id
+        }
+    }
+    
+    var imageUrl: String? {
+        get {
+            return image
         }
     }
     

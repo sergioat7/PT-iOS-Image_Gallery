@@ -46,18 +46,43 @@ class PhotoGridViewModel: BaseViewModel {
     private func getContent(tags: String) {
         
         view?.showLoading()
-        dataManager.searchPhotos(tags: tags,
-                                 success: { photosResponse in
-                                    
-                                    let photoCellViewModels = photosResponse.compactMap({ photoResponse -> PhotoCellViewModel in
-                                        return PhotoCellViewModel(photo: photoResponse)
-                                    })
-                                    self.photoCellViewModels = photoCellViewModels
-                                    self.view?.showPhotos()
-                                    self.view?.hideLoading()
-                                 }, failure: { errorResponse in
-                                    self.manageError(error: errorResponse)
-                                 })
+        dataManager.searchPhotos(tags: tags, success: { photosResponse in
+            self.getSizeContent(photosResponse: photosResponse, success: { photoCellViewModels in
+                
+                self.photoCellViewModels = photoCellViewModels
+                self.view?.showPhotos()
+                self.view?.hideLoading()
+            })
+        }, failure: { errorResponse in
+            self.manageError(error: errorResponse)
+        })
+    }
+    
+    private func getSizeContent(photosResponse: PhotosResponse, success: @escaping ([PhotoCellViewModel]) -> Void) {
+        
+        var photoCellViewModels: [PhotoCellViewModel] = []
+        for (index, photoResponse) in photosResponse.enumerated() {
+            
+            dataManager.getPhotoSizes(photoId: photoResponse.id,
+                                      success: { photoSizesResponse in
+                                        
+                                        let imageUrl = photoSizesResponse
+                                            .first(where: { $0.label.elementsEqual("Large Square") })?
+                                            .source
+                                        photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
+                                                                                      image: imageUrl))
+                                        if (photoCellViewModels.count == photosResponse.count) {
+                                            success(photoCellViewModels)
+                                        }
+                                      }, failure: { _ in
+                                        
+                                        photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
+                                                                                      image: nil))
+                                        if (photoCellViewModels.count == photosResponse.count) {
+                                            success(photoCellViewModels)
+                                        }
+                                      })
+        }
     }
 }
 
