@@ -11,6 +11,8 @@ import UIKit
 protocol PhotoGridViewProtocol: BaseViewProtocol {
     
     func showPhotos()
+    func showLoading()
+    func hideLoading()
 }
 
 protocol PhotoGridConfigurableViewProtocol: class {
@@ -22,7 +24,9 @@ class PhotoGridViewController: UIViewController {
     
     // MARK: - Public properties
     
+    @IBOutlet weak var etSearch: UITextField!
     @IBOutlet weak var cvPhotos: UICollectionView!
+    @IBOutlet weak var aiLoading: UIActivityIndicatorView!
     
     // MARK: - Private properties
     
@@ -35,6 +39,7 @@ class PhotoGridViewController: UIViewController {
         super.viewDidLoad()
         
         title = "PHOTOS".localized()
+        configViews()
         setupTableView()
     }
     
@@ -47,6 +52,10 @@ class PhotoGridViewController: UIViewController {
     // MARK: - Overrides
     
     // MARK: - Private functions
+    
+    private func configViews() {
+        etSearch.delegate = self
+    }
     
     private func setupTableView() {
         
@@ -67,6 +76,14 @@ extension PhotoGridViewController: PhotoGridViewProtocol {
     func showPhotos() {
         cvPhotos.reloadData()
     }
+    
+    func showLoading() {
+        aiLoading.startAnimating()
+    }
+    
+    func hideLoading() {
+        aiLoading.stopAnimating()
+    }
 }
 
 // MARK: - PhotoGridViewProtocol
@@ -76,6 +93,21 @@ extension PhotoGridViewController: PhotoGridConfigurableViewProtocol {
     func set(viewModel: PhotoGridViewModelProtocol) {
         self.viewModel = viewModel
     }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension PhotoGridViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if let text = textField.text {
+            viewModel?.searchPhotos(tags: text)
+        }
+        textField.text = nil
+        textField.resignFirstResponder()
+        return true
+      }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

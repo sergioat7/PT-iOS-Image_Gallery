@@ -10,7 +10,6 @@ import UIKit
 
 protocol PhotoGridViewModelProtocol: class {
     
-    func viewDidLoad()
     func searchPhotos(tags: String)
     func getPhotoCellViewModels() -> [PhotoCellViewModel]
 }
@@ -38,6 +37,7 @@ class PhotoGridViewModel: BaseViewModel {
     
     private func getContent(tags: String) {
         
+        view?.showLoading()
         dataManager.searchPhotos(tags: tags, success: { photosResponse in
             
             let photoCellViewModels = photosResponse.compactMap({ photoResponse -> PhotoCellViewModel in
@@ -45,16 +45,14 @@ class PhotoGridViewModel: BaseViewModel {
             })
             self.photoCellViewModels = photoCellViewModels
             self.view?.showPhotos()
+            self.view?.hideLoading()
         }, failure: { errorResponse in
-            
+            self.view?.hideLoading()
         })
     }
 }
 
 extension PhotoGridViewModel: PhotoGridViewModelProtocol {
-    
-    func viewDidLoad() {
-    }
     
     func searchPhotos(tags: String) {
         getContent(tags: tags)
