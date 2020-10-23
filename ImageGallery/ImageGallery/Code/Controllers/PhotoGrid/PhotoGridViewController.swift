@@ -20,7 +20,7 @@ protocol PhotoGridConfigurableViewProtocol: class {
     func set(viewModel: PhotoGridViewModelProtocol)
 }
 
-class PhotoGridViewController: UIViewController {
+class PhotoGridViewController: BaseViewController {
     
     // MARK: - Public properties
     

@@ -29,26 +29,35 @@ class PhotoGridViewModel: BaseViewModel {
     
     init(view:PhotoGridViewProtocol,
          dataManager: PhotoGridDataManagerProtocol) {
+        
         self.view = view
         self.dataManager = dataManager
     }
     
     // MARK: - Private methods
     
+    private func manageError(error: ErrorResponse) {
+
+        view?.hideLoading()
+        view?.showError(message: error.message,
+                        handler: nil)
+    }
+    
     private func getContent(tags: String) {
         
         view?.showLoading()
-        dataManager.searchPhotos(tags: tags, success: { photosResponse in
-            
-            let photoCellViewModels = photosResponse.compactMap({ photoResponse -> PhotoCellViewModel in
-                return PhotoCellViewModel(photo: photoResponse)
-            })
-            self.photoCellViewModels = photoCellViewModels
-            self.view?.showPhotos()
-            self.view?.hideLoading()
-        }, failure: { errorResponse in
-            self.view?.hideLoading()
-        })
+        dataManager.searchPhotos(tags: tags,
+                                 success: { photosResponse in
+                                    
+                                    let photoCellViewModels = photosResponse.compactMap({ photoResponse -> PhotoCellViewModel in
+                                        return PhotoCellViewModel(photo: photoResponse)
+                                    })
+                                    self.photoCellViewModels = photoCellViewModels
+                                    self.view?.showPhotos()
+                                    self.view?.hideLoading()
+                                 }, failure: { errorResponse in
+                                    self.manageError(error: errorResponse)
+                                 })
     }
 }
 
