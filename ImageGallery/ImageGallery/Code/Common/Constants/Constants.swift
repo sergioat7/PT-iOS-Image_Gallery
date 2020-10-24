@@ -12,6 +12,7 @@ struct Constants {
 
     // MARK: - Network constants
     
+    static let host = "api.flickr.com"
     static let methodQueryParam = "method"
     static let tagsQueryParam = "tags"
     static let pageQueryParam = "page"

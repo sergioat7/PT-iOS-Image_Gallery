@@ -12,19 +12,28 @@ import SwifterSwift
 
 public class APIClient {
     
-    static let shared = APIClient()
+    // MARK: - Private properties
     
-    let session = Session(configuration: URLSessionConfiguration.default)
-    public var baseEndpoint: String {
-        return "https://api.flickr.com/services/rest"
+    public static let shared = APIClient()
+    
+    // MARK: - Private properties
+    
+    private let session = Session(configuration: URLSessionConfiguration.default,
+                                  serverTrustManager: CustomServerTrustManager(evaluators: [
+                                    Constants.host: PinnedCertificatesTrustEvaluator()
+                                  ]))
+    private var baseEndpoint: String {
+        return "https://\(Constants.host)/services/rest"
     }
-    public var defaultQueryParams: Parameters {
+    private var defaultQueryParams: Parameters {
         return [
             "format" : "json",
             "nojsoncallback" : "1",
             "api_key" : "f9cc014fa76b098f9e82f1c288379ea1"
         ]
     }
+    
+    // MARK: - Public functions
     
     func sendServer<T: APIRequest>(_ request: T,
                                    success: @escaping (T.Response) -> Void,
