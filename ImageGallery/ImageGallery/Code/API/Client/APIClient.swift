@@ -20,7 +20,7 @@ public class APIClient {
     
     private let session = Session(configuration: URLSessionConfiguration.default,
                                   serverTrustManager: CustomServerTrustManager(evaluators: [
-                                    Constants.host: PinnedCertificatesTrustEvaluator()
+                                    Constants.host: PinnedCertificatesTrustEvaluator(certificates: ParseDERCertificate().getCertificates())
                                   ]))
     private var baseEndpoint: String {
         return "https://\(Constants.host)/services/rest"

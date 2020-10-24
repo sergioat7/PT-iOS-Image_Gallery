@@ -45,7 +45,7 @@
 		FBE5B586254217DA001C43DD /* PhotoGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE5B580254217DA001C43DD /* PhotoGridViewModel.swift */; };
 		FBE5B587254217DA001C43DD /* PhotoGridDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE5B581254217DA001C43DD /* PhotoGridDataManager.swift */; };
 		FBF8EA9C2544AB7E0071C8BB /* CustomServerTrustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF8EA9B2544AB7E0071C8BB /* CustomServerTrustManager.swift */; };
-		FBF8EAAF2544EBA50071C8BB /* flickr.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = FBF8EAAE2544EBA50071C8BB /* flickr.com.cer */; };
+		FBF8EAA42544B6BA0071C8BB /* ParseDERCertificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF8EAA32544B6BA0071C8BB /* ParseDERCertificate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,7 +109,7 @@
 		FBE5B580254217DA001C43DD /* PhotoGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridViewModel.swift; sourceTree = "<group>"; };
 		FBE5B581254217DA001C43DD /* PhotoGridDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridDataManager.swift; sourceTree = "<group>"; };
 		FBF8EA9B2544AB7E0071C8BB /* CustomServerTrustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomServerTrustManager.swift; sourceTree = "<group>"; };
-		FBF8EAAE2544EBA50071C8BB /* flickr.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = flickr.com.cer; path = ../../../../../flickr.com.cer; sourceTree = "<group>"; };
+		FBF8EAA32544B6BA0071C8BB /* ParseDERCertificate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseDERCertificate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,10 +334,10 @@
 		FBB2B1F82540C40100999894 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FBF8EAAE2544EBA50071C8BB /* flickr.com.cer */,
 				FBF8EA9B2544AB7E0071C8BB /* CustomServerTrustManager.swift */,
 				FBB2B1D22540C22900999894 /* Info.plist */,
 				FB1FEBF02544562100C87388 /* Localization */,
+				FBF8EAA32544B6BA0071C8BB /* ParseDERCertificate.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -521,7 +521,6 @@
 				FBB2B1D12540C22900999894 /* LaunchScreen.storyboard in Resources */,
 				FBAA69222542C31A00BE85B1 /* PhotoCollectionViewCell.xib in Resources */,
 				FBB2B1CE2540C22900999894 /* Assets.xcassets in Resources */,
-				FBF8EAAF2544EBA50071C8BB /* flickr.com.cer in Resources */,
 				FBE5B582254217DA001C43DD /* PhotoGridView.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,6 +600,7 @@
 				FB4692FD2541AB5600B9A38D /* PhotoSizeResponse.swift in Sources */,
 				FBAA691B2542C30000BE85B1 /* PhotoCellViewModel.swift in Sources */,
 				FBF8EA9C2544AB7E0071C8BB /* CustomServerTrustManager.swift in Sources */,
+				FBF8EAA42544B6BA0071C8BB /* ParseDERCertificate.swift in Sources */,
 				FBB2B2032540C5D700999894 /* BaseViewModel.swift in Sources */,
 				FBB2B1C52540C22700999894 /* AppDelegate.swift in Sources */,
 				FBE5B583254217DA001C43DD /* PhotoGridRouter.swift in Sources */,
