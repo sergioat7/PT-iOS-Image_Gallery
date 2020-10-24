@@ -330,8 +330,8 @@
 		FBB2B1F82540C40100999894 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FB1FEBF02544562100C87388 /* Localization */,
 				FBB2B1D22540C22900999894 /* Info.plist */,
+				FB1FEBF02544562100C87388 /* Localization */,
 			);
 			path = Resources;
 			sourceTree = "<group>";

@@ -5,3 +5,13 @@
   Created by Sergio Aragonés on 24/10/2020.
   Copyright (c) 2020 Sergio Aragonés. All rights reserved.
 */
+
+// General
+
+"APP_NAME" = "Image Gallery";
+"PHOTOS" = "Flickr images";
+
+// Errors
+
+"ERROR_SERVER" = "There was an error on getting data. Please, try again";
+"ERROR_BUTTON_ACCEPT" = "Accept";

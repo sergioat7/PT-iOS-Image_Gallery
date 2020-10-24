@@ -31,7 +31,7 @@ class BaseViewController: UIViewController {
     
     func showError(message: String, handler: (() -> Void)?) {
         
-        let popup = PopupDialog(title: "app_name".localized(),
+        let popup = PopupDialog(title: "APP_NAME".localized(),
                                 message: message.localized())
         setupDialog()
         
