@@ -56,7 +56,9 @@ class PhotoGridViewController: BaseViewController {
     // MARK: - Private functions
     
     private func configViews() {
+        
         etSearch.delegate = self
+        etSearch.placeholder = "SEARCH".localized()
     }
     
     private func setupCollectionView() {
@@ -123,7 +125,10 @@ extension PhotoGridViewController: UITextFieldDelegate {
         
         if let text = textField.text {
             
+            showLoading()
             viewModel?.setTags(tags: text)
+            viewModel?.reloadData()
+            viewModel?.searchPhotos()
         }
         textField.resignFirstResponder()
         return true
