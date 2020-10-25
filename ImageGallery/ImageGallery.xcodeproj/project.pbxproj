@@ -25,6 +25,7 @@
 		FB4692FF2541AC2B00B9A38D /* SizePhotoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4692FE2541AC2B00B9A38D /* SizePhotoResponse.swift */; };
 		FB4693022541AE5100B9A38D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4693012541AE5100B9A38D /* Constants.swift */; };
 		FB85752B254601480073B6A7 /* PhotoGridApiClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB85752A254601480073B6A7 /* PhotoGridApiClientTests.swift */; };
+		FB85753725460C1E0073B6A7 /* PhotoGridDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB85753625460C1E0073B6A7 /* PhotoGridDataManagerTests.swift */; };
 		FBAA691B2542C30000BE85B1 /* PhotoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAA691A2542C30000BE85B1 /* PhotoCellViewModel.swift */; };
 		FBAA69212542C31A00BE85B1 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAA691F2542C31A00BE85B1 /* PhotoCollectionViewCell.swift */; };
 		FBAA69222542C31A00BE85B1 /* PhotoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FBAA69202542C31A00BE85B1 /* PhotoCollectionViewCell.xib */; };
@@ -85,6 +86,7 @@
 		FB4693012541AE5100B9A38D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FB85752A254601480073B6A7 /* PhotoGridApiClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridApiClientTests.swift; sourceTree = "<group>"; };
 		FB857532254606DB0073B6A7 /* PhotoGridTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PhotoGridTests.xctestplan; sourceTree = "<group>"; };
+		FB85753625460C1E0073B6A7 /* PhotoGridDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridDataManagerTests.swift; sourceTree = "<group>"; };
 		FBAA691A2542C30000BE85B1 /* PhotoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCellViewModel.swift; sourceTree = "<group>"; };
 		FBAA691F2542C31A00BE85B1 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		FBAA69202542C31A00BE85B1 /* PhotoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				FB8575212545FFFC0073B6A7 /* APIClient */,
+				FB85753625460C1E0073B6A7 /* PhotoGridDataManagerTests.swift */,
 			);
 			path = PhotoGrid;
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB85753725460C1E0073B6A7 /* PhotoGridDataManagerTests.swift in Sources */,
 				FB85752B254601480073B6A7 /* PhotoGridApiClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
