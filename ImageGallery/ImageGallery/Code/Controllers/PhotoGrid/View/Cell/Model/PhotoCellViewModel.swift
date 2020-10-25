@@ -10,12 +10,15 @@ class PhotoCellViewModel {
 
     private let photo: PhotoResponse
     private let image: String?
+    private let fullImage: String?
     
     init(photo: PhotoResponse,
-         image: String?) {
+         image: String?,
+         fullImage: String?) {
         
         self.photo = photo
         self.image = image
+        self.fullImage = fullImage
     }
     
     var id: String {
@@ -33,6 +36,12 @@ class PhotoCellViewModel {
     var title: String {
         get {
             return photo.title
+        }
+    }
+    
+    var fullImageUrl: String? {
+        get {
+            return fullImage
         }
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ImageSlideshow
 
 protocol PhotoGridViewModelProtocol: class {
     
@@ -14,6 +15,7 @@ protocol PhotoGridViewModelProtocol: class {
     func searchPhotos()
     func getPhotoCellViewModels() -> [PhotoCellViewModel]
     func reloadData()
+    func presentImageFullScreen(imageUrl: URL)
 }
 
 class PhotoGridViewModel: BaseViewModel {
@@ -27,6 +29,7 @@ class PhotoGridViewModel: BaseViewModel {
     private var dataManager: PhotoGridDataManagerProtocol
     private var tags = ""
     private var photoCellViewModels: [PhotoCellViewModel] = []
+    private var slideShowViewController: FullScreenSlideshowViewController!
     
     // MARK: - Initialization
     
@@ -68,18 +71,19 @@ class PhotoGridViewModel: BaseViewModel {
             dataManager.getPhotoSizes(photoId: photoResponse.id,
                                       success: { photoSizesResponse in
                                         
-                                        let imageUrl = photoSizesResponse
-                                            .first(where: { $0.label.elementsEqual("Large Square") })?
-                                            .source
+                                        let imageUrl = photoSizesResponse.first(where: { $0.label.elementsEqual("Large Square") })?.source
+                                        let fullImageUrl = photoSizesResponse.first(where: { $0.label.elementsEqual("Large") })?.source
                                         photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
-                                                                                      image: imageUrl))
+                                                                                      image: imageUrl,
+                                                                                      fullImage: fullImageUrl))
                                         if (photoCellViewModels.count == photosResponse.count) {
                                             success(photoCellViewModels)
                                         }
                                       }, failure: { _ in
                                         
                                         photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
-                                                                                      image: nil))
+                                                                                      image: nil,
+                                                                                      fullImage: nil))
                                         if (photoCellViewModels.count == photosResponse.count) {
                                             success(photoCellViewModels)
                                         }
@@ -110,6 +114,17 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
         
         dataManager.resetPage()
         photoCellViewModels = []
+    }
+    
+    func presentImageFullScreen(imageUrl: URL) {
+        
+        let images = [AlamofireSource(url: imageUrl)]
+        slideShowViewController = FullScreenSlideshowViewController()
+        slideShowViewController.inputs = images
+        slideShowViewController.slideshow.contentScaleMode = .scaleAspectFit
+        
+        UIViewController.getCurrentViewController()?.present(slideShowViewController,
+                                                             animated: true)
     }
 }
 
