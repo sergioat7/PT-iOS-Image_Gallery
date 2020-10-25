@@ -192,3 +192,17 @@ extension PhotoGridViewController: UICollectionViewDataSource {
         }
     }
 }
+
+// MARK: - UICollectionViewDelegate
+
+extension PhotoGridViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let photoCellViewModels = viewModel?.getPhotoCellViewModels()
+        if let fullImageUrlString = photoCellViewModels?[indexPath.row].fullImageUrl,
+           let fullImageUrl = URL(string: fullImageUrlString) {
+            viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
+        }
+    }
+}
