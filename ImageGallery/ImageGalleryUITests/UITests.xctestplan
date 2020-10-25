@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "D8FE09BA-24D5-43BB-9772-78C8F456E4FC",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ImageGallery.xcodeproj",
+        "identifier" : "FBB2B1E12540C22900999894",
+        "name" : "ImageGalleryUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
