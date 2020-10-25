@@ -59,7 +59,10 @@ class PhotoGridViewModel: BaseViewModel {
                 self.view?.hideLoading()
             })
         }, failure: { errorResponse in
+            
             self.manageError(error: errorResponse)
+            self.photoCellViewModels = []
+            self.view?.showPhotos()
         })
     }
     

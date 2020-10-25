@@ -27,6 +27,7 @@ class PhotoGridViewController: BaseViewController {
     @IBOutlet weak var etSearch: UITextField!
     @IBOutlet weak var cvPhotos: UICollectionView!
     @IBOutlet weak var aiLoading: UIActivityIndicatorView!
+    @IBOutlet weak var ivNoResults: UIImageView!
     
     // MARK: - Private properties
     
@@ -59,6 +60,7 @@ class PhotoGridViewController: BaseViewController {
         
         etSearch.delegate = self
         etSearch.placeholder = "SEARCH".localized()
+        ivNoResults.isHidden = false
     }
     
     private func setupCollectionView() {
@@ -171,6 +173,7 @@ extension PhotoGridViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         let photoCellViewModelsCount = viewModel?.getPhotoCellViewModels().count ?? 0
+        ivNoResults.isHidden = photoCellViewModelsCount > 0
         return photoCellViewModelsCount
     }
     
