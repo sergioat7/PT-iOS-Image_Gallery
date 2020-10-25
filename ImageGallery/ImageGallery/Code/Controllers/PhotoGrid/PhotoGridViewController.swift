@@ -123,7 +123,10 @@ extension PhotoGridViewController: UITextFieldDelegate {
         
         if let text = textField.text {
             
+            showLoading()
             viewModel?.setTags(tags: text)
+            viewModel?.reloadData()
+            viewModel?.searchPhotos()
         }
         textField.resignFirstResponder()
         return true

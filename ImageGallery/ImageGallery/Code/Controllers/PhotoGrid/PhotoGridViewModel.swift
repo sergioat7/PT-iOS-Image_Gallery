@@ -95,11 +95,7 @@ class PhotoGridViewModel: BaseViewModel {
 extension PhotoGridViewModel: PhotoGridViewModelProtocol {
     
     func setTags(tags: String) {
-        
-        view?.showLoading()
         self.tags = tags
-        reloadData()
-        searchPhotos()
     }
     
     func searchPhotos() {
