@@ -56,7 +56,9 @@ class PhotoGridViewController: BaseViewController {
     // MARK: - Private functions
     
     private func configViews() {
+        
         etSearch.delegate = self
+        etSearch.placeholder = "SEARCH".localized()
     }
     
     private func setupCollectionView() {

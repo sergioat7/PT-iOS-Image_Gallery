@@ -9,7 +9,11 @@
 // General
 
 "APP_NAME" = "Image Gallery";
+
+// Photos view
+
 "PHOTOS" = "Flickr images";
+"SEARCH" = "Search";
 
 // Errors
 
