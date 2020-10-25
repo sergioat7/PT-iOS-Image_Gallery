@@ -3,4 +3,6 @@ use_frameworks!
 
 target 'ImageGallery' do
   pod 'PopupDialog', '~> 1.1.1'
+  pod 'ImageSlideshow', '~> 1.9.0'
+  pod 'ImageSlideshow/Alamofire', '~> 1.9.0'
 end
