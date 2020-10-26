@@ -19,8 +19,8 @@ class PhotoGridRouter: BaseRouter {
         let storyboard: UIStoryboard = UIStoryboard(name: "PhotoGridView",
                                                     bundle: nil)
         if let controller = storyboard.instantiateViewController(withIdentifier: "PhotoGrid") as? PhotoGridViewController {
-            let viewModel: PhotoGridViewModelProtocol = PhotoGridViewModel(view: controller,
-                                                                           dataManager: dataManager)
+            
+            let viewModel: PhotoGridViewModelProtocol = PhotoGridViewModel(dataManager: dataManager)
             controller.set(viewModel: viewModel)
             return controller
         }

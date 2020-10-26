@@ -26,9 +26,7 @@ protocol PhotoGridViewModelProtocol: class {
 class PhotoGridViewModel: BaseViewModel {
     
     // MARK: - Public variables
-    
-    weak var view:PhotoGridViewProtocol?
-    
+        
     // MARK: - Private variables
     
     private var dataManager: PhotoGridDataManagerProtocol
@@ -40,10 +38,7 @@ class PhotoGridViewModel: BaseViewModel {
     
     // MARK: - Initialization
     
-    init(view:PhotoGridViewProtocol,
-         dataManager: PhotoGridDataManagerProtocol) {
-        
-        self.view = view
+    init(dataManager: PhotoGridDataManagerProtocol) {
         self.dataManager = dataManager
     }
     
@@ -57,7 +52,6 @@ class PhotoGridViewModel: BaseViewModel {
                 var newValue = self.getPhotoCellViewModelsValue()
                 newValue.append(contentsOf: photoCellViewModels)
                 self.photoCellViewModels.onNext(newValue)
-                self.view?.showPhotos()
                 self.loading.onNext(false)
             })
         }, failure: { errorResponse in
@@ -65,7 +59,6 @@ class PhotoGridViewModel: BaseViewModel {
             self.loading.onNext(false)
             self.error.onNext(errorResponse)
             self.photoCellViewModels.onNext([])
-            self.view?.showPhotos()
         })
     }
     

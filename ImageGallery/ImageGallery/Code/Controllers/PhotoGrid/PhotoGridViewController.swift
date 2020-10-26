@@ -10,11 +10,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol PhotoGridViewProtocol: BaseViewProtocol {
-    
-    func showPhotos()
-}
-
 protocol PhotoGridConfigurableViewProtocol: class {
     
     func set(viewModel: PhotoGridViewModelProtocol)
@@ -97,28 +92,6 @@ class PhotoGridViewController: BaseViewController {
             self.etSearch.resignFirstResponder()
         }.disposed(by: disposeBag)
         
-        viewModel?
-            .getLoading()
-            .bind(to: aiLoading.rx.isAnimating)
-            .disposed(by: disposeBag)
-        
-        viewModel?
-            .getError()
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { errorResponse in
-                
-                self.showError(message: errorResponse.message,
-                               handler: nil)
-                self.ivNoResults.isHidden = false
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel?
-            .getPhotoCellViewModels()
-            .bind(to: cvPhotos.rx.items(cellIdentifier: Constants.cellName, cellType: PhotoCollectionViewCell.self)) { (row,photo,cell) in
-                cell.photoCellViewModel = photo
-            }.disposed(by: disposeBag)
-        
         cvPhotos
             .rx
             .willDisplayCell
@@ -128,7 +101,6 @@ class PhotoGridViewController: BaseViewController {
                 if indexPath.item == (photoCellViewModelsCount - 1) {
                     self.viewModel?.searchPhotos()
                 }
-                self.ivNoResults.isHidden = photoCellViewModelsCount > 0
             })).disposed(by: disposeBag)
 
         cvPhotos
@@ -147,6 +119,38 @@ class PhotoGridViewController: BaseViewController {
             .rx
             .setDelegate(self)
             .disposed(by: disposeBag)
+        
+        viewModel?
+            .getLoading()
+            .bind(to: aiLoading.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getLoading()
+            .bind(to: refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getError()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { errorResponse in
+                
+                self.showError(message: errorResponse.message,
+                               handler: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getPhotoCellViewModels()
+            .bind(to: cvPhotos.rx.items(cellIdentifier: Constants.cellName, cellType: PhotoCollectionViewCell.self)) { (row,photo,cell) in
+                cell.photoCellViewModel = photo
+            }.disposed(by: disposeBag)
+        
+        viewModel?
+            .getPhotoCellViewModels()
+            .subscribe(onNext: { photos in
+                self.ivNoResults.isHidden = photos.count > 0
+            }).disposed(by: disposeBag)
     }
     
     @objc private func reloadData() {
@@ -156,18 +160,7 @@ class PhotoGridViewController: BaseViewController {
     }
 }
 
-// MARK: - PhotoGridViewProtocol
-
-extension PhotoGridViewController: PhotoGridViewProtocol {
-    
-    func showPhotos() {
-        
-        cvPhotos.reloadData()
-        refreshControl.endRefreshing()
-    }
-}
-
-// MARK: - PhotoGridViewProtocol
+// MARK: - PhotoGridConfigurableViewProtocol
 
 extension PhotoGridViewController: PhotoGridConfigurableViewProtocol {
     
