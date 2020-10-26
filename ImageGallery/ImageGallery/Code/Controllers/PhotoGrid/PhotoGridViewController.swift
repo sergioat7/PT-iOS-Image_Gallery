@@ -61,7 +61,6 @@ class PhotoGridViewController: BaseViewController {
     
     private func configViews() {
         
-        etSearch.delegate = self
         etSearch.placeholder = "SEARCH".localized()
         ivNoResults.isHidden = false
     }
@@ -85,6 +84,18 @@ class PhotoGridViewController: BaseViewController {
     }
     
     private func setupBindings() {
+        
+        etSearch.rx.controlEvent([.editingDidEndOnExit]).subscribe { _ in
+            
+            if let text = self.etSearch.text {
+
+                self.aiLoading.startAnimating()
+                self.viewModel?.setTags(tags: text)
+                self.viewModel?.reloadData()
+                self.viewModel?.searchPhotos()
+            }
+            self.etSearch.resignFirstResponder()
+        }.disposed(by: disposeBag)
         
         viewModel?
             .getLoading()
@@ -163,24 +174,6 @@ extension PhotoGridViewController: PhotoGridConfigurableViewProtocol {
     func set(viewModel: PhotoGridViewModelProtocol) {
         self.viewModel = viewModel
     }
-}
-
-// MARK: - UITextFieldDelegate
-
-extension PhotoGridViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        if let text = textField.text {
-            
-            aiLoading.startAnimating()
-            viewModel?.setTags(tags: text)
-            viewModel?.reloadData()
-            viewModel?.searchPhotos()
-        }
-        textField.resignFirstResponder()
-        return true
-      }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
