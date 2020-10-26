@@ -26,6 +26,8 @@
 		FB4693022541AE5100B9A38D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4693012541AE5100B9A38D /* Constants.swift */; };
 		FB52E468254630B000DDC15F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FB1FEC072544567300C87388 /* Localizable.strings */; };
 		FB52E46C254630B200DDC15F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FB1FEC122544568900C87388 /* Localizable.strings */; };
+		FB6EBF4E2546CB370034E775 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = FB6EBF4D2546CB370034E775 /* RxCocoa */; };
+		FB6EBF502546CB370034E775 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FB6EBF4F2546CB370034E775 /* RxSwift */; };
 		FB85752B254601480073B6A7 /* PhotoGridApiClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB85752A254601480073B6A7 /* PhotoGridApiClientTests.swift */; };
 		FB85753725460C1E0073B6A7 /* PhotoGridDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB85753625460C1E0073B6A7 /* PhotoGridDataManagerTests.swift */; };
 		FB85753C254610E00073B6A7 /* PhotoGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB85753B254610E00073B6A7 /* PhotoGridViewModelTests.swift */; };
@@ -125,8 +127,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB6EBF502546CB370034E775 /* RxSwift in Frameworks */,
 				FBB5088F2541F520004C4E51 /* Kingfisher in Frameworks */,
 				FB4692C5254187F700B9A38D /* Alamofire in Frameworks */,
+				FB6EBF4E2546CB370034E775 /* RxCocoa in Frameworks */,
 				FB4692C82541881D00B9A38D /* SwifterSwift in Frameworks */,
 				D2EE414805D776B894F3B1F7 /* Pods_ImageGallery.framework in Frameworks */,
 			);
@@ -449,6 +453,8 @@
 				FB4692C4254187F700B9A38D /* Alamofire */,
 				FB4692C72541881D00B9A38D /* SwifterSwift */,
 				FBB5088E2541F520004C4E51 /* Kingfisher */,
+				FB6EBF4D2546CB370034E775 /* RxCocoa */,
+				FB6EBF4F2546CB370034E775 /* RxSwift */,
 			);
 			productName = ImageGallery;
 			productReference = FBB2B1C12540C22700999894 /* ImageGallery.app */;
@@ -528,6 +534,7 @@
 				FB4692C3254187F700B9A38D /* XCRemoteSwiftPackageReference "Alamofire" */,
 				FB4692C62541881D00B9A38D /* XCRemoteSwiftPackageReference "SwifterSwift" */,
 				FBB5088D2541F51F004C4E51 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				FB6EBF4C2546CB370034E775 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = FBB2B1C22540C22700999894 /* Products */;
 			projectDirPath = "";
@@ -1007,6 +1014,14 @@
 				minimumVersion = 5.2.0;
 			};
 		};
+		FB6EBF4C2546CB370034E775 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
 		FBB5088D2541F51F004C4E51 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1027,6 +1042,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FB4692C62541881D00B9A38D /* XCRemoteSwiftPackageReference "SwifterSwift" */;
 			productName = SwifterSwift;
+		};
+		FB6EBF4D2546CB370034E775 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FB6EBF4C2546CB370034E775 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		FB6EBF4F2546CB370034E775 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FB6EBF4C2546CB370034E775 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 		FBB5088E2541F520004C4E51 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
