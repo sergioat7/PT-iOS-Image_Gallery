@@ -15,9 +15,10 @@ protocol PhotoGridViewModelProtocol: class {
     
     func getLoading() -> PublishSubject<Bool>
     func getError() -> PublishSubject<ErrorResponse>
+    func getPhotoCellViewModels() -> BehaviorSubject<[PhotoCellViewModel]>
+    func getPhotoCellViewModelsValue() -> [PhotoCellViewModel]
     func setTags(tags: String)
     func searchPhotos()
-    func getPhotoCellViewModels() -> [PhotoCellViewModel]
     func reloadData()
     func presentImageFullScreen(imageUrl: URL)
 }
@@ -32,9 +33,9 @@ class PhotoGridViewModel: BaseViewModel {
     
     private var dataManager: PhotoGridDataManagerProtocol
     private let loading: PublishSubject<Bool> = PublishSubject()
-    private let error : PublishSubject<ErrorResponse> = PublishSubject()
+    private let error: PublishSubject<ErrorResponse> = PublishSubject()
+    private let photoCellViewModels: BehaviorSubject<[PhotoCellViewModel]> = BehaviorSubject(value: [])
     private var tags = ""
-    private var photoCellViewModels: [PhotoCellViewModel] = []
     private var slideShowViewController: FullScreenSlideshowViewController!
     
     // MARK: - Initialization
@@ -53,7 +54,9 @@ class PhotoGridViewModel: BaseViewModel {
         dataManager.searchPhotos(tags: tags, success: { photosResponse in
             self.getSizeContent(photosResponse: photosResponse, success: { photoCellViewModels in
                 
-                self.photoCellViewModels.append(contentsOf: photoCellViewModels)
+                var newValue = self.getPhotoCellViewModelsValue()
+                newValue.append(contentsOf: photoCellViewModels)
+                self.photoCellViewModels.onNext(newValue)
                 self.view?.showPhotos()
                 self.loading.onNext(false)
             })
@@ -61,7 +64,7 @@ class PhotoGridViewModel: BaseViewModel {
             
             self.loading.onNext(false)
             self.error.onNext(errorResponse)
-            self.photoCellViewModels = []
+            self.photoCellViewModels.onNext([])
             self.view?.showPhotos()
         })
     }
@@ -105,6 +108,19 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
         return error
     }
     
+    func getPhotoCellViewModels() -> BehaviorSubject<[PhotoCellViewModel]> {
+        return photoCellViewModels
+    }
+    
+    func getPhotoCellViewModelsValue() -> [PhotoCellViewModel] {
+        
+        do {
+            return try photoCellViewModels.value()
+        } catch {
+            return []
+        }
+    }
+    
     func setTags(tags: String) {
         self.tags = tags
     }
@@ -113,14 +129,10 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
         getContent(tags: tags)
     }
     
-    func getPhotoCellViewModels() -> [PhotoCellViewModel] {
-        return photoCellViewModels
-    }
-    
     func reloadData() {
         
         dataManager.resetPage()
-        photoCellViewModels = []
+        photoCellViewModels.onNext([])
     }
     
     func presentImageFullScreen(imageUrl: URL) {
