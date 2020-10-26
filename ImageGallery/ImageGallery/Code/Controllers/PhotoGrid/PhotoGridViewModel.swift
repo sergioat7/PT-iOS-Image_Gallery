@@ -8,9 +8,12 @@
 
 import UIKit
 import ImageSlideshow
+import RxSwift
+import RxCocoa
 
 protocol PhotoGridViewModelProtocol: class {
     
+    func getLoading() -> PublishSubject<Bool>
     func setTags(tags: String)
     func searchPhotos()
     func getPhotoCellViewModels() -> [PhotoCellViewModel]
@@ -27,6 +30,7 @@ class PhotoGridViewModel: BaseViewModel {
     // MARK: - Private variables
     
     private var dataManager: PhotoGridDataManagerProtocol
+    private let loading: PublishSubject<Bool> = PublishSubject()
     private var tags = ""
     private var photoCellViewModels: [PhotoCellViewModel] = []
     private var slideShowViewController: FullScreenSlideshowViewController!
@@ -44,7 +48,7 @@ class PhotoGridViewModel: BaseViewModel {
     
     private func manageError(error: ErrorResponse) {
 
-        view?.hideLoading()
+        loading.onNext(false)
         view?.showError(message: error.message,
                         handler: nil)
     }
@@ -56,7 +60,7 @@ class PhotoGridViewModel: BaseViewModel {
                 
                 self.photoCellViewModels.append(contentsOf: photoCellViewModels)
                 self.view?.showPhotos()
-                self.view?.hideLoading()
+                self.loading.onNext(false)
             })
         }, failure: { errorResponse in
             
@@ -96,6 +100,10 @@ class PhotoGridViewModel: BaseViewModel {
 }
 
 extension PhotoGridViewModel: PhotoGridViewModelProtocol {
+    
+    func getLoading() -> PublishSubject<Bool> {
+        return loading
+    }
     
     func setTags(tags: String) {
         self.tags = tags

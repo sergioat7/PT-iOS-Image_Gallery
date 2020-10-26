@@ -7,12 +7,12 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol PhotoGridViewProtocol: BaseViewProtocol {
     
     func showPhotos()
-    func showLoading()
-    func hideLoading()
 }
 
 protocol PhotoGridConfigurableViewProtocol: class {
@@ -32,6 +32,7 @@ class PhotoGridViewController: BaseViewController {
     // MARK: - Private properties
     
     private var viewModel:PhotoGridViewModelProtocol?
+    private let disposeBag = DisposeBag()
     private let itemsPerRow: CGFloat = 2
     private let marginsHorizontal: CGFloat = 20
     private let refreshControl = UIRefreshControl.init(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
@@ -44,6 +45,7 @@ class PhotoGridViewController: BaseViewController {
         title = "PHOTOS".localized()
         configViews()
         setupCollectionView()
+        setupBindings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,6 +82,11 @@ class PhotoGridViewController: BaseViewController {
                           forCellWithReuseIdentifier: Constants.cellName)
     }
     
+    private func setupBindings() {
+        
+        viewModel?.getLoading().bind(to: aiLoading.rx.isAnimating).disposed(by: disposeBag)
+    }
+    
     private func loadMore() {
         viewModel?.searchPhotos()
     }
@@ -100,14 +107,6 @@ extension PhotoGridViewController: PhotoGridViewProtocol {
         cvPhotos.reloadData()
         refreshControl.endRefreshing()
     }
-    
-    func showLoading() {
-        aiLoading.startAnimating()
-    }
-    
-    func hideLoading() {
-        aiLoading.stopAnimating()
-    }
 }
 
 // MARK: - PhotoGridViewProtocol
@@ -127,7 +126,7 @@ extension PhotoGridViewController: UITextFieldDelegate {
         
         if let text = textField.text {
             
-            showLoading()
+            aiLoading.startAnimating()
             viewModel?.setTags(tags: text)
             viewModel?.reloadData()
             viewModel?.searchPhotos()
