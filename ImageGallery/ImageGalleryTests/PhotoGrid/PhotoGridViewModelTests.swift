@@ -14,6 +14,7 @@ import RxCocoa
 class PhotoGridViewModelTests: XCTestCase {
     
     var sut: PhotoGridViewModelProtocol!
+    let disposeBag = DisposeBag()
 
     override func setUpWithError() throws {
         
@@ -32,14 +33,16 @@ class PhotoGridViewModelTests: XCTestCase {
         var isLoading: Bool?
         let promise = expectation(description: "")
         
+        sut.viewDidLoad()
         sut.searchPhotos()
         sut
-            .getLoading()
+            .getLoadingObserver()
             .subscribe(onNext:{ loading in
                 
                 isLoading = loading
                 promise.fulfill()
             })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
         XCTAssertNotNil(isLoading)
@@ -51,15 +54,17 @@ class PhotoGridViewModelTests: XCTestCase {
         var error: ErrorResponse?
         let promise = expectation(description: "")
         
+        sut.viewDidLoad()
         sut.searchPhotos()
         sut
-            .getError()
+            .getErrorObserver()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { errorResponse in
                 
                 error = errorResponse
                 promise.fulfill()
             })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
         XCTAssertNotNil(error)
@@ -70,10 +75,11 @@ class PhotoGridViewModelTests: XCTestCase {
         var photos: [PhotoCellViewModel]?
         let promise = expectation(description: "")
         
+        sut.viewDidLoad()
         sut.setTags(tags: "kitten")
         sut.searchPhotos()
         sut
-            .getPhotoCellViewModels()
+            .getPhotoCellViewModelsObserver()
             .subscribe(onNext: { photosResponse in
                 
                 photos = photosResponse
@@ -81,11 +87,12 @@ class PhotoGridViewModelTests: XCTestCase {
                     promise.fulfill()
                 }
             })
-        wait(for: [promise], timeout: 60)
+            .disposed(by: disposeBag)
+        wait(for: [promise], timeout: 120)
         
         XCTAssertNotNil(photos)
         XCTAssertTrue(photos!.count > 0)
-        XCTAssertTrue(sut.getPhotoCellViewModelsValue().count > 0)
+        XCTAssertTrue(sut.getPhotoCellViewModelsObserverValue().count > 0)
     }
     
     func testSearchPhotosWrong() throws {
@@ -95,12 +102,13 @@ class PhotoGridViewModelTests: XCTestCase {
         
         sut.searchPhotos()
         sut
-            .getPhotoCellViewModels()
+            .getPhotoCellViewModelsObserver()
             .subscribe(onNext: { photosResponse in
                 
                 photos = photosResponse
                 promise.fulfill()
             })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
         XCTAssertNotNil(photos)
@@ -110,6 +118,6 @@ class PhotoGridViewModelTests: XCTestCase {
     func testReloadDataRight() throws {
         
         sut.reloadData()
-        XCTAssertTrue(sut.getPhotoCellViewModelsValue().count == 0)
+        XCTAssertTrue(sut.getPhotoCellViewModelsObserverValue().count == 0)
     }
 }
