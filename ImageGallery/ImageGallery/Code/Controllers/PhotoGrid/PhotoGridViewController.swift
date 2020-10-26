@@ -38,6 +38,7 @@ class PhotoGridViewController: BaseViewController {
         super.viewDidLoad()
         
         title = "PHOTOS".localized()
+        viewModel?.viewDidLoad()
         configViews()
         registerNib()
         setupCollectionView()

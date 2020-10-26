@@ -13,6 +13,7 @@ import RxCocoa
 
 protocol PhotoGridViewModelProtocol: class {
     
+    func viewDidLoad()
     func getLoading() -> PublishSubject<Bool>
     func getError() -> PublishSubject<ErrorResponse>
     func getPhotoCellViewModels() -> BehaviorSubject<[PhotoCellViewModel]>
@@ -30,9 +31,10 @@ class PhotoGridViewModel: BaseViewModel {
     // MARK: - Private variables
     
     private var dataManager: PhotoGridDataManagerProtocol
-    private let loading: PublishSubject<Bool> = PublishSubject()
-    private let error: PublishSubject<ErrorResponse> = PublishSubject()
-    private let photoCellViewModels: BehaviorSubject<[PhotoCellViewModel]> = BehaviorSubject(value: [])
+    private let loadingObserver: PublishSubject<Bool> = PublishSubject()
+    private let errorObserver: PublishSubject<ErrorResponse> = PublishSubject()
+    private let photoCellViewModelsObserver: BehaviorSubject<[PhotoCellViewModel]> = BehaviorSubject(value: [])
+    private let disposeBag = DisposeBag()
     private var tags = ""
     private var slideShowViewController: FullScreenSlideshowViewController!
     
@@ -41,89 +43,58 @@ class PhotoGridViewModel: BaseViewModel {
     init(dataManager: PhotoGridDataManagerProtocol) {
         self.dataManager = dataManager
     }
-    
-    // MARK: - Private methods
-    
-    private func getContent(tags: String) {
-        
-        dataManager.searchPhotos(tags: tags, success: { photosResponse in
-            self.getSizeContent(photosResponse: photosResponse, success: { photoCellViewModels in
-                
-                var newValue = self.getPhotoCellViewModelsValue()
-                newValue.append(contentsOf: photoCellViewModels)
-                self.photoCellViewModels.onNext(newValue)
-                self.loading.onNext(false)
-            })
-        }, failure: { errorResponse in
-            
-            self.loading.onNext(false)
-            self.error.onNext(errorResponse)
-            self.photoCellViewModels.onNext([])
-        })
-    }
-    
-    private func getSizeContent(photosResponse: PhotosResponse, success: @escaping ([PhotoCellViewModel]) -> Void) {
-        
-        var photoCellViewModels: [PhotoCellViewModel] = []
-        for photoResponse in photosResponse {
-            
-            dataManager.getPhotoSizes(photoId: photoResponse.id,
-                                      success: { photoSizesResponse in
-                                        
-                                        let imageUrl = photoSizesResponse.first(where: { $0.label.elementsEqual("Large Square") })?.source
-                                        let fullImageUrl = self.getFullImageUrl(sizes: photoSizesResponse)
-                                        photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
-                                                                                      image: imageUrl,
-                                                                                      fullImage: fullImageUrl))
-                                        if (photoCellViewModels.count == photosResponse.count) {
-                                            success(photoCellViewModels)
-                                        }
-                                      }, failure: { _ in
-                                        
-                                        photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
-                                                                                      image: nil,
-                                                                                      fullImage: nil))
-                                        if (photoCellViewModels.count == photosResponse.count) {
-                                            success(photoCellViewModels)
-                                        }
-                                      })
-        }
-    }
-    
-    private func getFullImageUrl(sizes: PhotoSizesResponse) -> String? {
-        
-        if let large = sizes.first(where: { $0.label.elementsEqual("Large") })?.source {
-            return large
-        } else if let large = sizes.first(where: { $0.label.elementsEqual("Original") })?.source {
-            return large
-        } else if let large2048 = sizes.first(where: { $0.label.elementsEqual("Large 2048") })?.source {
-            return large2048
-        } else if let large1600 = sizes.first(where: { $0.label.elementsEqual("Large 1600") })?.source {
-            return large1600
-        } else {
-            return nil
-        }
-    }
 }
 
 extension PhotoGridViewModel: PhotoGridViewModelProtocol {
     
+    func viewDidLoad() {
+        
+        dataManager
+            .getPhotosObserver()
+            .subscribe(onNext: { photosResponse in
+                self.dataManager.getPhotoSizes(photosResponse: photosResponse)
+            })
+            .disposed(by: disposeBag)
+        
+        dataManager
+            .getPhotoCellViewModelsObserver()
+            .subscribe(onNext: { photoCellViewModels in
+                
+                var newValue = self.getPhotoCellViewModelsValue()
+                newValue.append(contentsOf: photoCellViewModels)
+                self.photoCellViewModelsObserver.onNext(newValue)
+                self.loadingObserver.onNext(false)
+            })
+            .disposed(by: disposeBag)
+        
+        dataManager
+            .getErrorObserver()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { errorResponse in
+                
+                self.loadingObserver.onNext(false)
+                self.errorObserver.onNext(errorResponse)
+                self.photoCellViewModelsObserver.onNext([])
+            })
+            .disposed(by: disposeBag)
+    }
+    
     func getLoading() -> PublishSubject<Bool> {
-        return loading
+        return loadingObserver
     }
     
     func getError() -> PublishSubject<ErrorResponse> {
-        return error
+        return errorObserver
     }
     
     func getPhotoCellViewModels() -> BehaviorSubject<[PhotoCellViewModel]> {
-        return photoCellViewModels
+        return photoCellViewModelsObserver
     }
     
     func getPhotoCellViewModelsValue() -> [PhotoCellViewModel] {
         
         do {
-            return try photoCellViewModels.value()
+            return try photoCellViewModelsObserver.value()
         } catch {
             return []
         }
@@ -134,13 +105,13 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
     }
     
     func searchPhotos() {
-        getContent(tags: tags)
+        dataManager.searchPhotos(tags: tags)
     }
     
     func reloadData() {
         
         dataManager.resetPage()
-        photoCellViewModels.onNext([])
+        photoCellViewModelsObserver.onNext([])
     }
     
     func presentImageFullScreen(imageUrl: URL) {
