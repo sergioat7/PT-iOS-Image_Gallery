@@ -14,10 +14,10 @@ import RxCocoa
 protocol PhotoGridViewModelProtocol: class {
     
     func viewDidLoad()
-    func getLoading() -> PublishSubject<Bool>
-    func getError() -> PublishSubject<ErrorResponse>
-    func getPhotoCellViewModels() -> BehaviorSubject<[PhotoCellViewModel]>
-    func getPhotoCellViewModelsValue() -> [PhotoCellViewModel]
+    func getLoadingObserver() -> PublishSubject<Bool>
+    func getErrorObserver() -> PublishSubject<ErrorResponse>
+    func getPhotoCellViewModelsObserver() -> BehaviorSubject<[PhotoCellViewModel]>
+    func getPhotoCellViewModelsObserverValue() -> [PhotoCellViewModel]
     func setTags(tags: String)
     func searchPhotos()
     func reloadData()
@@ -25,8 +25,6 @@ protocol PhotoGridViewModelProtocol: class {
 }
 
 class PhotoGridViewModel: BaseViewModel {
-    
-    // MARK: - Public variables
         
     // MARK: - Private variables
     
@@ -60,7 +58,7 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
             .getPhotoCellViewModelsObserver()
             .subscribe(onNext: { photoCellViewModels in
                 
-                var newValue = self.getPhotoCellViewModelsValue()
+                var newValue = self.getPhotoCellViewModelsObserverValue()
                 newValue.append(contentsOf: photoCellViewModels)
                 self.photoCellViewModelsObserver.onNext(newValue)
                 self.loadingObserver.onNext(false)
@@ -79,19 +77,19 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
             .disposed(by: disposeBag)
     }
     
-    func getLoading() -> PublishSubject<Bool> {
+    func getLoadingObserver() -> PublishSubject<Bool> {
         return loadingObserver
     }
     
-    func getError() -> PublishSubject<ErrorResponse> {
+    func getErrorObserver() -> PublishSubject<ErrorResponse> {
         return errorObserver
     }
     
-    func getPhotoCellViewModels() -> BehaviorSubject<[PhotoCellViewModel]> {
+    func getPhotoCellViewModelsObserver() -> BehaviorSubject<[PhotoCellViewModel]> {
         return photoCellViewModelsObserver
     }
     
-    func getPhotoCellViewModelsValue() -> [PhotoCellViewModel] {
+    func getPhotoCellViewModelsObserverValue() -> [PhotoCellViewModel] {
         
         do {
             return try photoCellViewModelsObserver.value()

@@ -49,10 +49,6 @@ class PhotoGridViewController: BaseViewController {
         super.viewWillAppear(animated)
     }
     
-    // MARK: - Actions
-    
-    // MARK: - Overrides
-    
     // MARK: - Private functions
     
     private func configViews() {
@@ -100,7 +96,7 @@ class PhotoGridViewController: BaseViewController {
             .willDisplayCell
             .subscribe(onNext: ({ (cell,indexPath) in
 
-                let photoCellViewModelsCount = self.viewModel?.getPhotoCellViewModelsValue().count ?? 0
+                let photoCellViewModelsCount = self.viewModel?.getPhotoCellViewModelsObserverValue().count ?? 0
                 if indexPath.item == (photoCellViewModelsCount - 1) {
                     self.viewModel?.searchPhotos()
                 }
@@ -112,7 +108,7 @@ class PhotoGridViewController: BaseViewController {
             .itemSelected
             .subscribe(onNext:{ indexPath in
 
-                let photoCellViewModels = self.viewModel?.getPhotoCellViewModelsValue()
+                let photoCellViewModels = self.viewModel?.getPhotoCellViewModelsObserverValue()
                 if let fullImageUrlString = photoCellViewModels?[indexPath.row].fullImageUrl,
                    let fullImageUrl = URL(string: fullImageUrlString) {
                     self.viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
@@ -126,17 +122,17 @@ class PhotoGridViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         viewModel?
-            .getLoading()
+            .getLoadingObserver()
             .bind(to: aiLoading.rx.isAnimating)
             .disposed(by: disposeBag)
         
         viewModel?
-            .getLoading()
+            .getLoadingObserver()
             .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
         
         viewModel?
-            .getError()
+            .getErrorObserver()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { errorResponse in
                 
@@ -146,14 +142,14 @@ class PhotoGridViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         viewModel?
-            .getPhotoCellViewModels()
+            .getPhotoCellViewModelsObserver()
             .bind(to: cvPhotos.rx.items(cellIdentifier: Constants.cellName, cellType: PhotoCollectionViewCell.self)) { (row,photo,cell) in
                 cell.photoCellViewModel = photo
             }
             .disposed(by: disposeBag)
         
         viewModel?
-            .getPhotoCellViewModels()
+            .getPhotoCellViewModelsObserver()
             .subscribe(onNext: { photos in
                 self.ivNoResults.isHidden = photos.count > 0
             })

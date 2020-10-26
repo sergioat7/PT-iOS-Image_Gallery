@@ -97,7 +97,7 @@ extension PhotoGridDataManager: PhotoGridDataManagerProtocol {
         return errorObserver
     }
     
-    // MARK: - Private methods
+    // MARK: - Private functions
     
     private func getFullImageUrl(sizes: PhotoSizesResponse) -> String? {
         
