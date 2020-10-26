@@ -80,17 +80,19 @@ class PhotoGridViewController: BaseViewController {
     
     private func setupBindings() {
         
-        etSearch.rx.controlEvent([.editingDidEndOnExit]).subscribe { _ in
-            
-            if let text = self.etSearch.text {
-
-                self.aiLoading.startAnimating()
-                self.viewModel?.setTags(tags: text)
-                self.viewModel?.reloadData()
-                self.viewModel?.searchPhotos()
-            }
-            self.etSearch.resignFirstResponder()
-        }.disposed(by: disposeBag)
+        etSearch
+            .rx
+            .controlEvent([.editingDidEndOnExit]).subscribe { _ in
+                
+                if let text = self.etSearch.text {
+                    
+                    self.aiLoading.startAnimating()
+                    self.viewModel?.setTags(tags: text)
+                    self.viewModel?.reloadData()
+                    self.viewModel?.searchPhotos()
+                }
+                self.etSearch.resignFirstResponder()
+            }.disposed(by: disposeBag)
         
         cvPhotos
             .rx
@@ -101,7 +103,8 @@ class PhotoGridViewController: BaseViewController {
                 if indexPath.item == (photoCellViewModelsCount - 1) {
                     self.viewModel?.searchPhotos()
                 }
-            })).disposed(by: disposeBag)
+            }))
+            .disposed(by: disposeBag)
 
         cvPhotos
             .rx
@@ -113,7 +116,8 @@ class PhotoGridViewController: BaseViewController {
                    let fullImageUrl = URL(string: fullImageUrlString) {
                     self.viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
                 }
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         cvPhotos
             .rx
@@ -144,13 +148,15 @@ class PhotoGridViewController: BaseViewController {
             .getPhotoCellViewModels()
             .bind(to: cvPhotos.rx.items(cellIdentifier: Constants.cellName, cellType: PhotoCollectionViewCell.self)) { (row,photo,cell) in
                 cell.photoCellViewModel = photo
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
         
         viewModel?
             .getPhotoCellViewModels()
             .subscribe(onNext: { photos in
                 self.ivNoResults.isHidden = photos.count > 0
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func reloadData() {
