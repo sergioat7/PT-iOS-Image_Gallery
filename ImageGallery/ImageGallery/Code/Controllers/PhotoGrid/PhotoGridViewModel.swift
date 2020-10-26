@@ -67,7 +67,6 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
         
         dataManager
             .getErrorObserver()
-            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] errorResponse in
                 
                 self?.loadingObserver.onNext(false)
