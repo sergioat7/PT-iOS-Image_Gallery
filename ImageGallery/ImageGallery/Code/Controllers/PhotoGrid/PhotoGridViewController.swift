@@ -84,7 +84,19 @@ class PhotoGridViewController: BaseViewController {
     
     private func setupBindings() {
         
-        viewModel?.getLoading().bind(to: aiLoading.rx.isAnimating).disposed(by: disposeBag)
+        viewModel?
+            .getLoading()
+            .bind(to: aiLoading.rx.isAnimating)
+            .disposed(by: disposeBag)
+        viewModel?
+            .getError()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { errorResponse in
+                
+                self.showError(message: errorResponse.message,
+                               handler: nil)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func loadMore() {

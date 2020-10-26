@@ -14,6 +14,7 @@ import RxCocoa
 protocol PhotoGridViewModelProtocol: class {
     
     func getLoading() -> PublishSubject<Bool>
+    func getError() -> PublishSubject<ErrorResponse>
     func setTags(tags: String)
     func searchPhotos()
     func getPhotoCellViewModels() -> [PhotoCellViewModel]
@@ -31,6 +32,7 @@ class PhotoGridViewModel: BaseViewModel {
     
     private var dataManager: PhotoGridDataManagerProtocol
     private let loading: PublishSubject<Bool> = PublishSubject()
+    private let error : PublishSubject<ErrorResponse> = PublishSubject()
     private var tags = ""
     private var photoCellViewModels: [PhotoCellViewModel] = []
     private var slideShowViewController: FullScreenSlideshowViewController!
@@ -46,13 +48,6 @@ class PhotoGridViewModel: BaseViewModel {
     
     // MARK: - Private methods
     
-    private func manageError(error: ErrorResponse) {
-
-        loading.onNext(false)
-        view?.showError(message: error.message,
-                        handler: nil)
-    }
-    
     private func getContent(tags: String) {
         
         dataManager.searchPhotos(tags: tags, success: { photosResponse in
@@ -64,7 +59,8 @@ class PhotoGridViewModel: BaseViewModel {
             })
         }, failure: { errorResponse in
             
-            self.manageError(error: errorResponse)
+            self.loading.onNext(false)
+            self.error.onNext(errorResponse)
             self.photoCellViewModels = []
             self.view?.showPhotos()
         })
@@ -103,6 +99,10 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
     
     func getLoading() -> PublishSubject<Bool> {
         return loading
+    }
+    
+    func getError() -> PublishSubject<ErrorResponse> {
+        return error
     }
     
     func setTags(tags: String) {
