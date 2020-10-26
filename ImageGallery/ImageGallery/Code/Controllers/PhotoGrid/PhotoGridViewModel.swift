@@ -49,30 +49,30 @@ extension PhotoGridViewModel: PhotoGridViewModelProtocol {
         
         dataManager
             .getPhotosObserver()
-            .subscribe(onNext: { photosResponse in
-                self.dataManager.getPhotoSizes(photosResponse: photosResponse)
+            .subscribe(onNext: { [weak self] photosResponse in
+                self?.dataManager.getPhotoSizes(photosResponse: photosResponse)
             })
             .disposed(by: disposeBag)
         
         dataManager
             .getPhotoCellViewModelsObserver()
-            .subscribe(onNext: { photoCellViewModels in
+            .subscribe(onNext: { [weak self] photoCellViewModels in
                 
-                var newValue = self.getPhotoCellViewModelsObserverValue()
+                var newValue = self?.getPhotoCellViewModelsObserverValue() ?? []
                 newValue.append(contentsOf: photoCellViewModels)
-                self.photoCellViewModelsObserver.onNext(newValue)
-                self.loadingObserver.onNext(false)
+                self?.photoCellViewModelsObserver.onNext(newValue)
+                self?.loadingObserver.onNext(false)
             })
             .disposed(by: disposeBag)
         
         dataManager
             .getErrorObserver()
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { errorResponse in
+            .subscribe(onNext: { [weak self] errorResponse in
                 
-                self.loadingObserver.onNext(false)
-                self.errorObserver.onNext(errorResponse)
-                self.photoCellViewModelsObserver.onNext([])
+                self?.loadingObserver.onNext(false)
+                self?.errorObserver.onNext(errorResponse)
+                self?.photoCellViewModelsObserver.onNext([])
             })
             .disposed(by: disposeBag)
     }

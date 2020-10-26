@@ -45,10 +45,6 @@ class PhotoGridViewController: BaseViewController {
         setupBindings()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     // MARK: - Private functions
     
     private func configViews() {
@@ -79,26 +75,26 @@ class PhotoGridViewController: BaseViewController {
         
         etSearch
             .rx
-            .controlEvent([.editingDidEndOnExit]).subscribe { _ in
+            .controlEvent([.editingDidEndOnExit]).subscribe { [weak self] _ in
                 
-                if let text = self.etSearch.text {
+                if let text = self?.etSearch.text {
                     
-                    self.aiLoading.startAnimating()
-                    self.viewModel?.setTags(tags: text)
-                    self.viewModel?.reloadData()
-                    self.viewModel?.searchPhotos()
+                    self?.aiLoading.startAnimating()
+                    self?.viewModel?.setTags(tags: text)
+                    self?.viewModel?.reloadData()
+                    self?.viewModel?.searchPhotos()
                 }
-                self.etSearch.resignFirstResponder()
+                self?.etSearch.resignFirstResponder()
             }.disposed(by: disposeBag)
         
         cvPhotos
             .rx
             .willDisplayCell
-            .subscribe(onNext: ({ (cell,indexPath) in
+            .subscribe(onNext: ({ [weak self] (cell,indexPath) in
 
-                let photoCellViewModelsCount = self.viewModel?.getPhotoCellViewModelsObserverValue().count ?? 0
+                let photoCellViewModelsCount = self?.viewModel?.getPhotoCellViewModelsObserverValue().count ?? 0
                 if indexPath.item == (photoCellViewModelsCount - 1) {
-                    self.viewModel?.searchPhotos()
+                    self?.viewModel?.searchPhotos()
                 }
             }))
             .disposed(by: disposeBag)
@@ -106,12 +102,12 @@ class PhotoGridViewController: BaseViewController {
         cvPhotos
             .rx
             .itemSelected
-            .subscribe(onNext:{ indexPath in
+            .subscribe(onNext:{ [weak self] indexPath in
 
-                let photoCellViewModels = self.viewModel?.getPhotoCellViewModelsObserverValue()
+                let photoCellViewModels = self?.viewModel?.getPhotoCellViewModelsObserverValue()
                 if let fullImageUrlString = photoCellViewModels?[indexPath.row].fullImageUrl,
                    let fullImageUrl = URL(string: fullImageUrlString) {
-                    self.viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
+                    self?.viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
                 }
             })
             .disposed(by: disposeBag)
@@ -134,9 +130,9 @@ class PhotoGridViewController: BaseViewController {
         viewModel?
             .getErrorObserver()
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { errorResponse in
+            .subscribe(onNext: { [weak self] errorResponse in
                 
-                self.showError(message: errorResponse.message,
+                self?.showError(message: errorResponse.message,
                                handler: nil)
             })
             .disposed(by: disposeBag)
@@ -150,8 +146,8 @@ class PhotoGridViewController: BaseViewController {
         
         viewModel?
             .getPhotoCellViewModelsObserver()
-            .subscribe(onNext: { photos in
-                self.ivNoResults.isHidden = photos.count > 0
+            .subscribe(onNext: { [weak self] photos in
+                self?.ivNoResults.isHidden = photos.count > 0
             })
             .disposed(by: disposeBag)
     }
