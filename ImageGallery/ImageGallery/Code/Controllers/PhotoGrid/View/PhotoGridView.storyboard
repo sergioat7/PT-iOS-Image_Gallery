@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Photo Grid View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="PhotoGrid" id="BYZ-38-t0r" customClass="PhotoGridViewController" customModule="ImageGallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="V9r-TK-Esi">
+                                <rect key="frame" x="0.0" y="58.5" width="375" height="608.5"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hMa-ia-Hbw">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="V34-3r-DdR">
+                                <rect key="frame" x="56.5" y="20" width="262.5" height="28.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                            </textField>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" id="kbU-l6-9Fd">
+                                <rect key="frame" x="0.0" y="29" width="375" height="608.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nojobsfound" translatesAutoresizingMaskIntoConstraints="NO" id="kEZ-tU-L4W">
+                                <rect key="frame" x="20" y="159" width="335" height="349"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="kEZ-tU-L4W" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="AN0-pT-X9A"/>
+                            <constraint firstItem="kEZ-tU-L4W" firstAttribute="top" relation="greaterThanOrEqual" secondItem="V34-3r-DdR" secondAttribute="bottom" constant="20" id="CYk-ss-533"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="V9r-TK-Esi" secondAttribute="trailing" id="HP2-rb-v9n"/>
+                            <constraint firstItem="V34-3r-DdR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="KJy-rr-5hG"/>
+                            <constraint firstItem="kEZ-tU-L4W" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="O1g-ph-QgM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kEZ-tU-L4W" secondAttribute="bottom" constant="20" id="Ppb-hG-djM"/>
+                            <constraint firstItem="V9r-TK-Esi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="XNi-jI-Esh"/>
+                            <constraint firstItem="V34-3r-DdR" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.7" id="c24-W7-oYv"/>
+                            <constraint firstItem="kEZ-tU-L4W" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fXb-Rx-n7g"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="V9r-TK-Esi" secondAttribute="bottom" id="jdZ-57-Kmz"/>
+                            <constraint firstItem="V34-3r-DdR" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jnq-lQ-D4G"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kEZ-tU-L4W" secondAttribute="trailing" constant="20" id="n2m-P8-j9O"/>
+                            <constraint firstItem="V9r-TK-Esi" firstAttribute="top" secondItem="V34-3r-DdR" secondAttribute="bottom" constant="10" id="xgo-MW-Eso"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="aiLoading" destination="kbU-l6-9Fd" id="Eka-bF-bMv"/>
+                        <outlet property="cvPhotos" destination="V9r-TK-Esi" id="1QK-5i-VEk"/>
+                        <outlet property="etSearch" destination="V34-3r-DdR" id="HV1-zx-V6a"/>
+                        <outlet property="ivNoResults" destination="kEZ-tU-L4W" id="QBH-hj-nm4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="133.5832083958021"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="nojobsfound" width="859" height="349"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

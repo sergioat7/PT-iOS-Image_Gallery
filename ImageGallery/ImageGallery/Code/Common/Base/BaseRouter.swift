@@ -11,6 +11,7 @@ import UIKit
 class BaseRouter {
     
     func push(viewController: UIViewController, animated: Bool = true) {
-        UIViewController.getCurrentNavigationController()?.pushViewController(viewController, animated: animated)
+        UIViewController.getCurrentNavigationController()?.pushViewController(viewController,
+                                                                              animated: animated)
     }
 }
