@@ -7,13 +7,8 @@
 //
 
 import UIKit
-
-protocol PhotoGridViewProtocol: BaseViewProtocol {
-    
-    func showPhotos()
-    func showLoading()
-    func hideLoading()
-}
+import RxSwift
+import RxCocoa
 
 protocol PhotoGridConfigurableViewProtocol: class {
     
@@ -32,6 +27,7 @@ class PhotoGridViewController: BaseViewController {
     // MARK: - Private properties
     
     private var viewModel:PhotoGridViewModelProtocol?
+    private let disposeBag = DisposeBag()
     private let itemsPerRow: CGFloat = 2
     private let marginsHorizontal: CGFloat = 20
     private let refreshControl = UIRefreshControl.init(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
@@ -42,35 +38,19 @@ class PhotoGridViewController: BaseViewController {
         super.viewDidLoad()
         
         title = "PHOTOS".localized()
+        viewModel?.viewDidLoad()
         configViews()
+        registerNib()
         setupCollectionView()
+        setupBindings()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    // MARK: - Actions
-    
-    // MARK: - Overrides
     
     // MARK: - Private functions
     
     private func configViews() {
         
-        etSearch.delegate = self
         etSearch.placeholder = "SEARCH".localized()
         ivNoResults.isHidden = false
-    }
-    
-    private func setupCollectionView() {
-        
-        cvPhotos.delegate = self
-        cvPhotos.dataSource = self
-        registerNib()
-        
-        refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
-        cvPhotos.refreshControl = refreshControl
     }
     
     private func registerNib() {
@@ -80,8 +60,96 @@ class PhotoGridViewController: BaseViewController {
                           forCellWithReuseIdentifier: Constants.cellName)
     }
     
-    private func loadMore() {
-        viewModel?.searchPhotos()
+    private func setupCollectionView() {
+        
+        cvPhotos.contentInset = UIEdgeInsets(top: 10.0,
+                                             left: marginsHorizontal,
+                                             bottom: 10.0,
+                                             right: marginsHorizontal)
+        
+        refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
+        cvPhotos.refreshControl = refreshControl
+    }
+    
+    private func setupBindings() {
+        
+        etSearch
+            .rx
+            .controlEvent([.editingDidEndOnExit]).subscribe { [weak self] _ in
+                
+                if let text = self?.etSearch.text {
+                    
+                    self?.aiLoading.startAnimating()
+                    self?.viewModel?.setTags(tags: text)
+                    self?.viewModel?.reloadData()
+                    self?.viewModel?.searchPhotos()
+                }
+                self?.etSearch.resignFirstResponder()
+            }.disposed(by: disposeBag)
+        
+        cvPhotos
+            .rx
+            .willDisplayCell
+            .subscribe(onNext: ({ [weak self] (cell,indexPath) in
+
+                let photoCellViewModelsCount = self?.viewModel?.getPhotoCellViewModelsObserverValue().count ?? 0
+                if indexPath.item == (photoCellViewModelsCount - 1) {
+                    self?.viewModel?.searchPhotos()
+                }
+            }))
+            .disposed(by: disposeBag)
+
+        cvPhotos
+            .rx
+            .itemSelected
+            .subscribe(onNext:{ [weak self] indexPath in
+
+                let photoCellViewModels = self?.viewModel?.getPhotoCellViewModelsObserverValue()
+                if let fullImageUrlString = photoCellViewModels?[indexPath.row].fullImageUrl,
+                   let fullImageUrl = URL(string: fullImageUrlString) {
+                    self?.viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        cvPhotos
+            .rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getLoadingObserver()
+            .bind(to: aiLoading.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getLoadingObserver()
+            .bind(to: refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getErrorObserver()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] errorResponse in
+                
+                self?.showError(message: errorResponse.message,
+                               handler: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getPhotoCellViewModelsObserver()
+            .bind(to: cvPhotos.rx.items(cellIdentifier: Constants.cellName, cellType: PhotoCollectionViewCell.self)) { (row,photo,cell) in
+                cell.photoCellViewModel = photo
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel?
+            .getPhotoCellViewModelsObserver()
+            .subscribe(onNext: { [weak self] photos in
+                self?.ivNoResults.isHidden = photos.count > 0
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func reloadData() {
@@ -91,26 +159,7 @@ class PhotoGridViewController: BaseViewController {
     }
 }
 
-// MARK: - PhotoGridViewProtocol
-
-extension PhotoGridViewController: PhotoGridViewProtocol {
-    
-    func showPhotos() {
-        
-        cvPhotos.reloadData()
-        refreshControl.endRefreshing()
-    }
-    
-    func showLoading() {
-        aiLoading.startAnimating()
-    }
-    
-    func hideLoading() {
-        aiLoading.stopAnimating()
-    }
-}
-
-// MARK: - PhotoGridViewProtocol
+// MARK: - PhotoGridConfigurableViewProtocol
 
 extension PhotoGridViewController: PhotoGridConfigurableViewProtocol {
     
@@ -119,98 +168,15 @@ extension PhotoGridViewController: PhotoGridConfigurableViewProtocol {
     }
 }
 
-// MARK: - UITextFieldDelegate
-
-extension PhotoGridViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        if let text = textField.text {
-            
-            showLoading()
-            viewModel?.setTags(tags: text)
-            viewModel?.reloadData()
-            viewModel?.searchPhotos()
-        }
-        textField.resignFirstResponder()
-        return true
-      }
-}
-
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension PhotoGridViewController: UICollectionViewDelegateFlowLayout {
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+
         let cvWidth = collectionView.frame.width - marginsHorizontal - marginsHorizontal
         let contentSize = cvWidth - ( marginsHorizontal * (itemsPerRow - 1) )
         let itemSize = contentSize / itemsPerRow
         return CGSize(width: itemSize, height: itemSize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        return UIEdgeInsets(top: 10.0,
-                            left: marginsHorizontal,
-                            bottom: 10.0,
-                            right: marginsHorizontal)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension PhotoGridViewController: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        let photoCellViewModelsCount = viewModel?.getPhotoCellViewModels().count ?? 0
-        ivNoResults.isHidden = photoCellViewModelsCount > 0
-        return photoCellViewModelsCount
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellName, for: indexPath)
-        let photosCellViewModel = viewModel?.getPhotoCellViewModels() ?? []
-        
-        if let photoCell = cell as? PhotoCollectionViewCell,
-              photosCellViewModel.count > 0 {
-            
-            let photoCellViewModel = photosCellViewModel[indexPath.row]
-            photoCell.photoCellViewModel = photoCellViewModel
-        }
-
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-        let photoCellViewModelsCount = viewModel?.getPhotoCellViewModels().count ?? 0
-        if indexPath.item == (photoCellViewModelsCount - 1) {
-            loadMore()
-        }
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-
-extension PhotoGridViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let photoCellViewModels = viewModel?.getPhotoCellViewModels()
-        if let fullImageUrlString = photoCellViewModels?[indexPath.row].fullImageUrl,
-           let fullImageUrl = URL(string: fullImageUrlString) {
-            viewModel?.presentImageFullScreen(imageUrl: fullImageUrl)
-        }
     }
 }

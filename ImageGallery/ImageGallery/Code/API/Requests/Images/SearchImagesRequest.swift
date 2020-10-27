@@ -25,6 +25,6 @@ class SearchImagesRequest: APIRequest {
         
         queryParams = [Constants.methodQueryParam : Constants.searchPhotosMethod]
         self.queryParams[Constants.tagsQueryParam] = tags
-        self.queryParams[Constants.pageQueryParam] = String(format: "/%ld", page)
+        self.queryParams[Constants.pageQueryParam] = String(format: "%ld", page)
     }
 }

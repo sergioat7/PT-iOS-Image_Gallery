@@ -7,21 +7,27 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol PhotoGridDataManagerProtocol: class {
     
-    func searchPhotos(tags: String, success: @escaping (PhotosResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
-    func getPhotoSizes(photoId: String, success: @escaping (PhotoSizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void)
+    func searchPhotos(tags: String)
+    func getPhotoSizes(photosResponse: PhotosResponse)
     func resetPage()
+    func getPhotosObserver() -> PublishSubject<PhotosResponse>
+    func getPhotoCellViewModelsObserver() -> PublishSubject<[PhotoCellViewModel]>
+    func getErrorObserver() -> PublishSubject<ErrorResponse>
 }
 
 class PhotoGridDataManager: BaseDataManager {
     
-    // MARK: - Public variables
-    
     // MARK: - Private variables
     
     private let apiClient: PhotoGridApiClientProtocol
+    private let photosObserver: PublishSubject<PhotosResponse> = PublishSubject()
+    private let photoCellViewModelsObserver: PublishSubject<[PhotoCellViewModel]> = PublishSubject()
+    private let disposeBag = DisposeBag()
     private var page: Int = 1
     
     // MARK: - Initialization
@@ -31,31 +37,60 @@ class PhotoGridDataManager: BaseDataManager {
     }
 }
 
+// MARK: - PhotoGridDataManagerProtocol
+
 extension PhotoGridDataManager: PhotoGridDataManagerProtocol {
     
-    func searchPhotos(tags: String, success: @escaping (PhotosResponse) -> Void, failure: @escaping (ErrorResponse) -> Void) {
+    func searchPhotos(tags: String) {
         
-        apiClient.searchPhotos(tags: tags,
-                               page: page,
-                               success: { searchResponse in
-                                
-                                self.page += 1
-                                if self.page > searchResponse.photos.pages {
-                                    self.page = 1
-                                }
-                                success(searchResponse.photos.photo)
-                               }, failure: failure)
+        apiClient.searchPhotos(tags: tags, page: page)
+        
+        apiClient
+            .getSearchObserver()
+            .subscribe(onNext: { [weak self] searchResponse in
+                
+                guard let strongSelf = self else { return }
+                strongSelf.page += 1
+                if strongSelf.page > searchResponse.photos.pages {
+                    strongSelf.page = 1
+                }
+                strongSelf.photosObserver.onNext(searchResponse.photos.photo)
+            })
+            .disposed(by: disposeBag)
     }
     
-    func getPhotoSizes(photoId: String, success: @escaping (PhotoSizesResponse) -> Void, failure: @escaping (ErrorResponse) -> Void) {
+    func getPhotoSizes(photosResponse: PhotosResponse) {
         
-        apiClient.getPhotoSizes(photoId: photoId,
-                                success: { sizesResponse in
-                                    success(sizesResponse.sizes.size)
-                                }, failure: failure)
+        for photoResponse in photosResponse {
+            apiClient.getPhotoSizes(photo: photoResponse)
+        }
+        
+        var photoCellViewModels: [PhotoCellViewModel] = []
+        apiClient
+            .getPhotoCellViewModelObserver()
+            .subscribe(onNext: { [weak self] photoCellViewModelResponse in
+                
+                photoCellViewModels.append(photoCellViewModelResponse)
+                if (photoCellViewModels.count == photosResponse.count) {
+                    self?.photoCellViewModelsObserver.onNext(photoCellViewModels)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     func resetPage() {
         page = 1
+    }
+    
+    func getPhotosObserver() -> PublishSubject<PhotosResponse> {
+        return photosObserver
+    }
+    
+    func getPhotoCellViewModelsObserver() -> PublishSubject<[PhotoCellViewModel]> {
+        return photoCellViewModelsObserver
+    }
+    
+    func getErrorObserver() -> PublishSubject<ErrorResponse> {
+        return apiClient.getErrorObserver()
     }
 }

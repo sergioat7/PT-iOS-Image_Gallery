@@ -8,111 +8,107 @@
 
 import UIKit
 import ImageSlideshow
+import RxSwift
+import RxCocoa
 
 protocol PhotoGridViewModelProtocol: class {
     
+    func viewDidLoad()
+    func getLoadingObserver() -> PublishSubject<Bool>
+    func getErrorObserver() -> PublishSubject<ErrorResponse>
+    func getPhotoCellViewModelsObserver() -> BehaviorSubject<[PhotoCellViewModel]>
+    func getPhotoCellViewModelsObserverValue() -> [PhotoCellViewModel]
     func setTags(tags: String)
     func searchPhotos()
-    func getPhotoCellViewModels() -> [PhotoCellViewModel]
     func reloadData()
     func presentImageFullScreen(imageUrl: URL)
 }
 
 class PhotoGridViewModel: BaseViewModel {
-    
-    // MARK: - Public variables
-    
-    weak var view:PhotoGridViewProtocol?
-    
+        
     // MARK: - Private variables
     
     private var dataManager: PhotoGridDataManagerProtocol
+    private let loadingObserver: PublishSubject<Bool> = PublishSubject()
+    private let errorObserver: PublishSubject<ErrorResponse> = PublishSubject()
+    private let photoCellViewModelsObserver: BehaviorSubject<[PhotoCellViewModel]> = BehaviorSubject(value: [])
+    private let disposeBag = DisposeBag()
     private var tags = ""
-    private var photoCellViewModels: [PhotoCellViewModel] = []
     private var slideShowViewController: FullScreenSlideshowViewController!
     
     // MARK: - Initialization
     
-    init(view:PhotoGridViewProtocol,
-         dataManager: PhotoGridDataManagerProtocol) {
-        
-        self.view = view
+    init(dataManager: PhotoGridDataManagerProtocol) {
         self.dataManager = dataManager
-    }
-    
-    // MARK: - Private methods
-    
-    private func manageError(error: ErrorResponse) {
-
-        view?.hideLoading()
-        view?.showError(message: error.message,
-                        handler: nil)
-    }
-    
-    private func getContent(tags: String) {
-        
-        dataManager.searchPhotos(tags: tags, success: { photosResponse in
-            self.getSizeContent(photosResponse: photosResponse, success: { photoCellViewModels in
-                
-                self.photoCellViewModels.append(contentsOf: photoCellViewModels)
-                self.view?.showPhotos()
-                self.view?.hideLoading()
-            })
-        }, failure: { errorResponse in
-            
-            self.manageError(error: errorResponse)
-            self.photoCellViewModels = []
-            self.view?.showPhotos()
-        })
-    }
-    
-    private func getSizeContent(photosResponse: PhotosResponse, success: @escaping ([PhotoCellViewModel]) -> Void) {
-        
-        var photoCellViewModels: [PhotoCellViewModel] = []
-        for photoResponse in photosResponse {
-            
-            dataManager.getPhotoSizes(photoId: photoResponse.id,
-                                      success: { photoSizesResponse in
-                                        
-                                        let imageUrl = photoSizesResponse.first(where: { $0.label.elementsEqual("Large Square") })?.source
-                                        let fullImageUrl = photoSizesResponse.first(where: { $0.label.elementsEqual("Large") })?.source
-                                        photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
-                                                                                      image: imageUrl,
-                                                                                      fullImage: fullImageUrl))
-                                        if (photoCellViewModels.count == photosResponse.count) {
-                                            success(photoCellViewModels)
-                                        }
-                                      }, failure: { _ in
-                                        
-                                        photoCellViewModels.append(PhotoCellViewModel(photo: photoResponse,
-                                                                                      image: nil,
-                                                                                      fullImage: nil))
-                                        if (photoCellViewModels.count == photosResponse.count) {
-                                            success(photoCellViewModels)
-                                        }
-                                      })
-        }
     }
 }
 
 extension PhotoGridViewModel: PhotoGridViewModelProtocol {
+    
+    func viewDidLoad() {
+        
+        dataManager
+            .getPhotosObserver()
+            .subscribe(onNext: { [weak self] photosResponse in
+                self?.dataManager.getPhotoSizes(photosResponse: photosResponse)
+            })
+            .disposed(by: disposeBag)
+        
+        dataManager
+            .getPhotoCellViewModelsObserver()
+            .subscribe(onNext: { [weak self] photoCellViewModels in
+                
+                var newValue = self?.getPhotoCellViewModelsObserverValue() ?? []
+                newValue.append(contentsOf: photoCellViewModels)
+                self?.photoCellViewModelsObserver.onNext(newValue)
+                self?.loadingObserver.onNext(false)
+            })
+            .disposed(by: disposeBag)
+        
+        dataManager
+            .getErrorObserver()
+            .subscribe(onNext: { [weak self] errorResponse in
+                
+                self?.loadingObserver.onNext(false)
+                self?.errorObserver.onNext(errorResponse)
+                self?.photoCellViewModelsObserver.onNext([])
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func getLoadingObserver() -> PublishSubject<Bool> {
+        return loadingObserver
+    }
+    
+    func getErrorObserver() -> PublishSubject<ErrorResponse> {
+        return errorObserver
+    }
+    
+    func getPhotoCellViewModelsObserver() -> BehaviorSubject<[PhotoCellViewModel]> {
+        return photoCellViewModelsObserver
+    }
+    
+    func getPhotoCellViewModelsObserverValue() -> [PhotoCellViewModel] {
+        
+        do {
+            return try photoCellViewModelsObserver.value()
+        } catch {
+            return []
+        }
+    }
     
     func setTags(tags: String) {
         self.tags = tags
     }
     
     func searchPhotos() {
-        getContent(tags: tags)
-    }
-    
-    func getPhotoCellViewModels() -> [PhotoCellViewModel] {
-        return photoCellViewModels
+        dataManager.searchPhotos(tags: tags)
     }
     
     func reloadData() {
         
         dataManager.resetPage()
-        photoCellViewModels = []
+        photoCellViewModelsObserver.onNext([])
     }
     
     func presentImageFullScreen(imageUrl: URL) {

@@ -41,8 +41,7 @@ class PhotoGridViewTests: XCTestCase {
 
         app.keyboards.buttons["Search"].tap()
         
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells.otherElements.containing(.staticText, identifier:"Uncatchable").element.tap()
+        app.collectionViews.children(matching: .cell).element(boundBy: 0).tap()
         app.buttons["ic cross white"].tap()
     }
     

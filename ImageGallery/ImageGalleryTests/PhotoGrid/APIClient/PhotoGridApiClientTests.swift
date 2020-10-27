@@ -7,11 +7,14 @@
 //
 
 import XCTest
+import RxSwift
+import RxCocoa
 @testable import ImageGallery
 
 class PhotoGridApiClientTests: XCTestCase {
     
     var sut: PhotoGridApiClient!
+    let disposeBag = DisposeBag()
     
     override func setUp() {
         
@@ -28,92 +31,96 @@ class PhotoGridApiClientTests: XCTestCase {
     func testSearchPhotosRight() throws {
         
         var searchedPhotos: SearchPhotosResponse?
-        var error: ErrorResponse?
         
         let promise = expectation(description: "Search successful")
-        sut.searchPhotos(tags: "kitten",
-                         page: 1,
-                         success: { searchResponse in
-                            
-                            searchedPhotos = searchResponse.photos
-                            promise.fulfill()
-                         }, failure: { errorResponse in
-                            
-                            error = errorResponse
-                            promise.fulfill()
-                         })
+        sut.searchPhotos(tags: "kitten", page: 1)
+        sut
+            .getSearchObserver()
+            .subscribe(onNext: { searchResponse in
+                
+                searchedPhotos = searchResponse.photos
+                promise.fulfill()
+            })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
         XCTAssertNotNil(searchedPhotos)
         XCTAssertTrue(searchedPhotos!.photo.count > 0)
-        XCTAssertNil(error)
     }
 
     func testSearchPhotosWrong() throws {
         
-        var searchedPhotos: SearchPhotosResponse?
         var error: ErrorResponse?
         
         let promise = expectation(description: "Search unsuccessful")
-        sut.searchPhotos(tags: "",
-                         page: 1,
-                         success: { searchResponse in
-                            
-                            searchedPhotos = searchResponse.photos
-                            promise.fulfill()
-                         }, failure: { errorResponse in
-                            
-                            error = errorResponse
-                            promise.fulfill()
-                         })
+        sut.searchPhotos(tags: "", page: 1)
+        sut
+            .getErrorObserver()
+            .subscribe(onNext: { errorResponse in
+                
+                error = errorResponse
+                promise.fulfill()
+            })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
-        XCTAssertNil(searchedPhotos)
         XCTAssertNotNil(error)
     }
     
     func testGetPhotoSizesRight() throws {
         
-        var sizes: SizePhotoResponse?
-        var error: ErrorResponse?
+        let photo = PhotoResponse(id: "50528729953",
+                                  owner: "",
+                                  secret: "",
+                                  server: "",
+                                  farm: 1,
+                                  title: "",
+                                  ispublic: 1,
+                                  isfriend: 1,
+                                  isfamily: 1)
+        var photoCellViewModel: PhotoCellViewModel?
         
         let promise = expectation(description: "Get sizes successful")
-        sut.getPhotoSizes(photoId: "50528729953",
-                          success: { sizesResponse in
-                            
-                            sizes = sizesResponse.sizes
-                            promise.fulfill()
-                         }, failure: { errorResponse in
-                            
-                            error = errorResponse
-                            promise.fulfill()
-                         })
+        sut.getPhotoSizes(photo: photo)
+        sut
+            .getPhotoCellViewModelObserver()
+            .subscribe(onNext: { photoCellViewModelResponse in
+                
+                photoCellViewModel = photoCellViewModelResponse
+                promise.fulfill()
+            })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
-        XCTAssertNotNil(sizes)
-        XCTAssertTrue(sizes!.size.count > 0)
-        XCTAssertNil(error)
+        XCTAssertNotNil(photoCellViewModel)
     }
 
     func testGetPhotoSizesWrong() throws {
         
-        var sizes: SizePhotoResponse?
-        var error: ErrorResponse?
+        let photo = PhotoResponse(id: "",
+                                  owner: "",
+                                  secret: "",
+                                  server: "",
+                                  farm: 1,
+                                  title: "",
+                                  ispublic: 1,
+                                  isfriend: 1,
+                                  isfamily: 1)
+        var photoCellViewModel: PhotoCellViewModel?
         
         let promise = expectation(description: "Get sizes unsuccessful")
-        sut.getPhotoSizes(photoId: "",
-                          success: { sizesResponse in
-                            
-                            sizes = sizesResponse.sizes
-                            promise.fulfill()
-                         }, failure: { errorResponse in
-                            
-                            error = errorResponse
-                            promise.fulfill()
-                         })
+        sut.getPhotoSizes(photo: photo)
+        sut
+            .getPhotoCellViewModelObserver()
+            .subscribe(onNext: { photoCellViewModelResponse in
+                
+                photoCellViewModel = photoCellViewModelResponse
+                promise.fulfill()
+            })
+            .disposed(by: disposeBag)
         wait(for: [promise], timeout: 60)
         
-        XCTAssertNil(sizes)
-        XCTAssertNotNil(error)
+        XCTAssertNotNil(photoCellViewModel)
+        XCTAssertNil(photoCellViewModel!.imageUrl)
     }
 }
